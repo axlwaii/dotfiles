@@ -1,5 +1,4 @@
 " setup vundle:  $ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-"
 source ~/.vim-rspec
 
  set nocompatible                    " be iMproved
@@ -98,8 +97,6 @@ source ~/.vim-rspec
 
  let g:unite_source_history_yank_enable = 1
  let g:unite_source_history_yank_enable = 1
-
-
  let g:unite_source_file_mru_limit = 20
  " Solarized
  let g:solarized_termcolors=256
@@ -152,4 +149,3 @@ source ~/.vim-rspec
 
  "Get rid of whitespace after saving
  autocmd BufWritePre * :%s/\s\+$//e
-
