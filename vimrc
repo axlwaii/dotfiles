@@ -100,6 +100,7 @@ source ~/.vim-rspec
  let g:unite_source_history_yank_enable = 1
 
 
+ let g:unite_source_file_mru_limit = 20
  " Solarized
  let g:solarized_termcolors=256
  set background=dark
