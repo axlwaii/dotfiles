@@ -105,6 +105,8 @@ source ~/.vim-rspec
  set background=dark
  colorscheme solarized
 
+ hi statusline ctermbg=White ctermfg=6
+
  call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
  nnoremap <leader>f :<C-u>Unite -start-insert file_rec/async<CR>
