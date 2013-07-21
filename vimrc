@@ -48,6 +48,8 @@ source ~/.vim-rspec
  set noswapfile                     " we don't need no ...
  set backupdir=~/.vim/tmp
 
+ set synmaxcol=256                  " syntax highlight is very slow in large columns
+
  filetype off                        " required!
 
  set rtp+=~/.vim/bundle/vundle/
