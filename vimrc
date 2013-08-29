@@ -1,15 +1,17 @@
 " setup vundle:  $ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 " Setting up Vundle - the vim plugin bundler
-    let iCanHazVundle=1
-    let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
-    if !filereadable(vundle_readme)
-        echo "Installing Vundle.."
-        echo ""
-        silent !mkdir -p ~/.vim/bundle
-        silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
-        let iCanHazVundle=0
-    endif
+  let iCanHazVundle=1
+  let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+  if !filereadable(vundle_readme)
+      echo "Installing Vundle.."
+      echo ""
+      silent !mkdir -p ~/.vim/bundle
+      silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+      let iCanHazVundle=0
+  endif
 " Setting up Vundle - the vim plugin bundler end
+
+source ~/.vim-rspec
 
  set nocompatible                    " be iMproved
 
@@ -71,22 +73,25 @@
 
  " My Bundles here:
  "
- " original repos on github
+ " look
  Bundle 'altercation/vim-colors-solarized'
+ Bundle 'Yggdroot/indentLine'
+ " languages 
  Bundle 'kchmck/vim-coffee-script'
- Bundle 'mattn/zencoding-vim'
- " Bundle 'ap/vim-css-color'
+ Bundle 'tpope/vim-haml'
  Bundle 'tpope/vim-rails.git'
  Bundle 'tpope/vim-rvm'
- Bundle 'tpope/vim-fugitive'
- Bundle 'Yggdroot/indentLine'
- Bundle 'tomtom/tcomment_vim'
- Bundle 'Shougo/unite.vim'
- Bundle 'epmatsw/ag.vim'
+ Bundle 'mattn/zencoding-vim'
+ " workflow 
+ Bundle 'kien/ctrlp.vim'
+ Bundle 'vim-scripts/EasyGrep'
  Bundle 'scrooloose/nerdtree'
- Bundle 'scrooloose/syntastic'
- Bundle 'Shougo/vimproc.vim'
+ Bundle 'tomtom/tcomment_vim'
  Bundle 'ervandew/supertab'
+
+ " Bundle 'ap/vim-css-color'
+ Bundle 'tpope/vim-fugitive'
+ " Bundle 'scrooloose/syntastic'
  " vim-scripts repos
  " Bundle 'L9'
  " non github repos
@@ -107,9 +112,6 @@
  let g:Powerline_stl_path_style = 'short'
  let g:indentLine_color_term = 157
 
- let g:unite_source_history_yank_enable = 1
-
- let g:unite_source_file_mru_limit = 20
  " Solarized
  let g:solarized_termcolors=256
  set background=dark
@@ -117,30 +119,13 @@
 
  hi statusline ctermbg=White ctermfg=6
 
- call unite#filters#matcher_default#use(['matcher_fuzzy'])
+ nnoremap <leader>f :CtrlP<CR>
+ nnoremap <leader>r :CtrlPMRU<CR>
+ nnoremap <leader>b :CtrlPBuffer<CR>
 
- nnoremap <leader>f :<C-u>Unite -start-insert file_rec/async<CR>
- nnoremap <leader>g :Unite grep:.<cr>
- nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
- nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
- nnoremap <leader>r :<C-u>Unite file_mru<CR>
-
-  " Custom mappings for the unite buffer
-  autocmd FileType unite call s:unite_settings()
-
-  function! s:unite_settings()
-    " Play nice with supertab
-    let b:SuperTabDisabled=1
-    " Enable navigation with control-j and control-k in insert mode
-    imap <buffer> <C-j>   <Plug>(unite_select_next_line)
-    imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
-  endfunction
-
-
- "Plugin mappings
  map <leader>n :NERDTreeToggle <CR>
- " map <leader>f :CtrlP<CR>
- " map <leader>b :CtrlPBuffer<CR>
+ imap <C-space> <Esc>
+
  " Clear search
  map <leader>c :noh<CR>
 
@@ -160,4 +145,4 @@
  autocmd FileType cs set omnifunc=syntaxcomplete#Complete
 
  "Get rid of whitespace after saving
- autocmd BufWritePre * :%s/\s\+$//e
+ " autocmd BufWritePre * :%s/\s\+$//e
