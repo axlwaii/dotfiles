@@ -11,7 +11,7 @@
   endif
 " Setting up Vundle - the vim plugin bundler end
 
-source ~/.vim-rspec
+" source ~/.vim-rspec
 
  set nocompatible                    " be iMproved
 
@@ -42,7 +42,7 @@ source ~/.vim-rspec
  set expandtab
  set number                          " always show linenumbers
 
- set cursorline
+ " set cursorline
 
  set laststatus=2                    " always show statusline
 
@@ -77,21 +77,22 @@ source ~/.vim-rspec
  Bundle 'altercation/vim-colors-solarized'
  Bundle 'Yggdroot/indentLine'
  " languages 
- Bundle 'kchmck/vim-coffee-script'
  Bundle 'tpope/vim-haml'
  Bundle 'tpope/vim-rails.git'
  Bundle 'tpope/vim-rvm'
  Bundle 'mattn/zencoding-vim'
+ Bundle 'thoughtbot/vim-rspec'
  " workflow 
  Bundle 'kien/ctrlp.vim'
  Bundle 'vim-scripts/EasyGrep'
  Bundle 'scrooloose/nerdtree'
  Bundle 'tomtom/tcomment_vim'
+ Bundle 'MarcWeber/vim-addon-mw-utils'
+ Bundle 'garbas/vim-snipmate'
  Bundle 'ervandew/supertab'
-
- " Bundle 'ap/vim-css-color'
  Bundle 'tpope/vim-fugitive'
- " Bundle 'scrooloose/syntastic'
+ Bundle 'tpope/vim-surround'
+ Bundle 'scrooloose/syntastic'
  " vim-scripts repos
  " Bundle 'L9'
  " non github repos
@@ -109,7 +110,6 @@ source ~/.vim-rspec
 
  "Plugin specific configurations
  let g:NERDTreeWinPos = "right"
- let g:Powerline_stl_path_style = 'short'
  let g:indentLine_color_term = 157
 
  " Solarized
@@ -129,6 +129,12 @@ source ~/.vim-rspec
  " Clear search
  map <leader>c :noh<CR>
 
+ " Rspec test runner
+ map <Leader>t :call RunCurrentSpecFile()<CR>
+ map <Leader>s :call RunNearestSpec()<CR>
+ map <Leader>l :call RunLastSpec()<CR>
+ map <Leader>a :call RunAllSpecs()<CR>
+
  """""""""""""""""
  "Code completion"
  """""""""""""""""
@@ -146,3 +152,18 @@ source ~/.vim-rspec
 
  "Get rid of whitespace after saving
  " autocmd BufWritePre * :%s/\s\+$//e
+
+function! <SID>StripTrailingWhitespaces()
+    " Preparation: save last search, and cursor position.
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " Do the business:
+    %s/\s\+$//e
+    " Clean up: restore previous search history, and cursor position
+    let @/=_s
+    call cursor(l, c)
+endfunction
+
+autocmd BufWritePre *.py,*.js,*.haml,*.rb,*.html,*.sass,*.scss :call <SID>StripTrailingWhitespaces()
+
