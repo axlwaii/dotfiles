@@ -87,8 +87,6 @@
  Bundle 'vim-scripts/EasyGrep'
  Bundle 'scrooloose/nerdtree'
  Bundle 'tomtom/tcomment_vim'
- Bundle 'MarcWeber/vim-addon-mw-utils'
- Bundle 'garbas/vim-snipmate'
  Bundle 'ervandew/supertab'
  Bundle 'tpope/vim-fugitive'
  Bundle 'tpope/vim-surround'
@@ -134,6 +132,12 @@
  map <Leader>s :call RunNearestSpec()<CR>
  map <Leader>l :call RunLastSpec()<CR>
  map <Leader>a :call RunAllSpecs()<CR>
+ 
+ """"""""""""""""""""
+ "Filetype indention"
+ """"""""""""""""""""
+ autocmd FileType javascript setlocal shiftwidth=4 tabstop=4
+ 
 
  """""""""""""""""
  "Code completion"
