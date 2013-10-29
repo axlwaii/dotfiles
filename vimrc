@@ -154,8 +154,6 @@
  autocmd FileType c set omnifunc=ccomplete#Complete
  autocmd FileType cs set omnifunc=syntaxcomplete#Complete
 
- "Get rid of whitespace after saving
- " autocmd BufWritePre * :%s/\s\+$//e
 
 function! <SID>StripTrailingWhitespaces()
     " Preparation: save last search, and cursor position.
