@@ -11,8 +11,6 @@
   endif
 " Setting up Vundle - the vim plugin bundler end
 
-" source ~/.vim-rspec
-
  set nocompatible                    " be iMproved
 
  if has("gui_macvim")
