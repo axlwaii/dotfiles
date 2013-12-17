@@ -89,6 +89,7 @@
  Bundle 'tpope/vim-fugitive'
  Bundle 'tpope/vim-surround'
  Bundle 'scrooloose/syntastic'
+ Bundle 'junegunn/vim-easy-align'
  " vim-scripts repos
  " Bundle 'L9'
  " non github repos
