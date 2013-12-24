@@ -73,6 +73,7 @@
  "
  " look
  Bundle 'altercation/vim-colors-solarized'
+ Bundle 'noahfrederick/vim-hemisu'
  Bundle 'Yggdroot/indentLine'
  " languages 
  Bundle 'tpope/vim-haml'
