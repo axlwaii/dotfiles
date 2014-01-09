@@ -109,6 +109,10 @@
  "Plugin specific configurations
  let g:NERDTreeWinPos = "right"
  let g:indentLine_color_term = 157
+ 
+ " Configure syntastic
+ let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['erlang', 'html'] }
+ let g:syntastic_javascript_checkers = ['jshint']
 
  " Solarized
  let g:solarized_termcolors=256
