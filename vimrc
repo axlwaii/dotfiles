@@ -115,9 +115,13 @@
  let g:syntastic_javascript_checkers = ['jshint']
 
  " Solarized
- let g:solarized_termcolors=256
- set background=dark
- colorscheme solarized
+ " let g:solarized_termcolors=256
+ " set background=dark
+ " colorscheme solarized
+ 
+ " Hemisu
+ set background=light
+ colorscheme hemisu
 
  hi statusline ctermbg=White ctermfg=6
 
