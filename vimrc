@@ -11,55 +11,11 @@
   endif
 " Setting up Vundle - the vim plugin bundler end
 
- set nocompatible                    " be iMproved
-
  if has("gui_macvim")
    set guioptions-=T                 "if using a GUI Version
  endif
 
- set mouse=a                         " Mouse support
- set clipboard=unnamed
-
- set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h14
- set fillchars+=stl:\ ,stlnc:\
-
- set encoding=utf-8                  " encoding UTF-8
- set t_Co=256
- " colorscheme distinguished
- " colorscheme kolor
- set noerrorbells visualbell t_vb=   "disabble these anoying error bells
- set backspace=indent,eol,start
- set hls                             " highlight search
- syntax on
-
- set ts=2                            " Tabs are 2 spaces
- set bs=2                            " Backspace over everything in insert mode
- set shiftwidth=2                    " Tabs under smart indent
- set autoindent
- " set smarttab
- set expandtab
- set number                          " always show linenumbers
-
- " set cursorline
-
- set laststatus=2                    " always show statusline
-
- set statusline=%F%m%r%h%w\
- set statusline+=%{fugitive#statusline()}\
- set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
- set statusline+=\ [line\ %l\/%L]
- set statusline+=%{rvm#statusline()}
-
- set nolist                          " dont show whitespace as dots
- set hidden
-
- let mapleader = ","
-"set nobackup                       " no backup
- set noswapfile                     " we don't need no ...
- set backupdir=~/.vim/tmp
-
- set synmaxcol=256                  " syntax highlight is very slow in large columns
-
+ set nocompatible                    " be iMproved
  filetype off                        " required!
 
  set rtp+=~/.vim/bundle/vundle/
@@ -73,10 +29,11 @@
  "
  " look
  Bundle 'altercation/vim-colors-solarized'
- Bundle 'noahfrederick/vim-hemisu'
  Bundle 'Yggdroot/indentLine'
+ Bundle 'noahfrederick/vim-hemisu'
+ Bundle 'bling/vim-airline'
+ Bundle 'edkolev/tmuxline.vim'
  " languages 
- Bundle 'tpope/vim-haml'
  Bundle 'tpope/vim-rails.git'
  Bundle 'tpope/vim-rvm'
  Bundle 'mattn/zencoding-vim'
@@ -86,6 +43,7 @@
  Bundle 'vim-scripts/EasyGrep'
  Bundle 'scrooloose/nerdtree'
  Bundle 'tomtom/tcomment_vim'
+ Bundle 'MarcWeber/vim-addon-mw-utils'
  Bundle 'ervandew/supertab'
  Bundle 'tpope/vim-fugitive'
  Bundle 'tpope/vim-surround'
@@ -106,26 +64,75 @@
  " see :h vundle for more details or wiki for FAQ
  " NOTE: comments after Bundle command are not allowed..
 
+
+ " BASIC CONFIGURATION
+ syntax on
+ set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h14
+ set number                          " always show linenumbers
+ set backspace=indent,eol,start
+ set noerrorbells visualbell t_vb=   "disabble these anoying error bells
+ set nolist                          " dont show whitespace as dots
+ set hidden
+ set mouse=a                         " Mouse support
+ set clipboard=unnamed
+ set wildmenu
+ set wildmode=list:longest,full
+ set fillchars+=stl:\ ,stlnc:\
+ set encoding=utf-8                  " encoding UTF-8
+ set t_Co=256
+ set hls                             " highlight search
+ set incsearch                       " start searching with the first letter
+ set ts=2                            " Tabs are 2 spaces
+ set bs=2                            " Backspace over everything in insert mode
+ set shiftwidth=2                    " Tabs under smart indent
+ set autoindent
+ " set smarttab
+ set expandtab
+ " set cursorline
+ set laststatus=2                    " always show statusline
+
+ " When not using vim-airline
+ " set statusline=%F%m%r%h%w\
+ " set statusline+=%{fugitive#statusline()}\
+ " set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
+ " set statusline+=\ [line\ %l\/%L]
+ " set statusline+=%{rvm#statusline()}
+
+ " hi statusline ctermbg=White ctermfg=9
+
+ let mapleader = ","
+ set nobackup                       " no backup
+ set noswapfile                     " we don't need no ...
+ " set backupdir=~/.vim/tmp
+
+ set synmaxcol=256                  " syntax highlight is very slow in large columns
+
  "Plugin specific configurations
  let g:NERDTreeWinPos = "right"
  let g:indentLine_color_term = 157
  
  " Configure syntastic
- let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['erlang', 'html'] }
+ let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['erlang', 'html', 'json'] }
  let g:syntastic_javascript_checkers = ['jshint']
 
+
+ " Airline
+ let g:airline_powerline_fonts = 1
+ let g:airline_solarized_reduced = 0
+ let g:airline_powerline_fonts = 1
+ let g:airline_theme = 'solarized'
+
  " Solarized
- " let g:solarized_termcolors=256
+ let g:solarized_termcolors=256
  " set background=dark
  " colorscheme solarized
  
  " Hemisu
  set background=light
- colorscheme hemisu
+ colorscheme hemisu 
 
- hi statusline ctermbg=White ctermfg=6
-
- nnoremap <leader>f :CtrlP<CR>
+ nnoremap <leader>f :CtrlPCurWD<CR>
+ nnoremap <leader>F :CtrlP<CR>
  nnoremap <leader>r :CtrlPMRU<CR>
  nnoremap <leader>b :CtrlPBuffer<CR>
 
@@ -139,18 +146,16 @@
  map <Leader>t :call RunCurrentSpecFile()<CR>
  map <Leader>s :call RunNearestSpec()<CR>
  map <Leader>l :call RunLastSpec()<CR>
- map <Leader>a :call RunAllSpecs()<CR>
- 
+ " map <Leader>a :call RunAllSpecs()<CR>
+
  """"""""""""""""""""
  "Filetype indention"
  """"""""""""""""""""
  autocmd FileType javascript setlocal shiftwidth=4 tabstop=4
- 
 
  """""""""""""""""
  "Code completion"
  """""""""""""""""
-
  autocmd FileType python set omnifunc=pythoncomplete#Complete
  autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
  autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
@@ -162,18 +167,17 @@
  autocmd FileType c set omnifunc=ccomplete#Complete
  autocmd FileType cs set omnifunc=syntaxcomplete#Complete
 
+ "Get rid of whitespace after saving
+ function! <SID>StripTrailingWhitespaces()
+   " Preparation: save last search, and cursor position.
+   let _s=@/
+   let l = line(".")
+   let c = col(".")
+   " Do the business:
+   %s/\s\+$//e
+   " Clean up: restore previous search history, and cursor position
+   let @/=_s
+   call cursor(l, c)
+ endfunction
 
-function! <SID>StripTrailingWhitespaces()
-    " Preparation: save last search, and cursor position.
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " Do the business:
-    %s/\s\+$//e
-    " Clean up: restore previous search history, and cursor position
-    let @/=_s
-    call cursor(l, c)
-endfunction
-
-autocmd BufWritePre *.py,*.js,*.haml,*.rb,*.html,*.sass,*.scss :call <SID>StripTrailingWhitespaces()
-
+ autocmd BufWritePre *.py,*.js,*.haml,*.rb,*.html,*.sass,*.scss :call <SID>StripTrailingWhitespaces()
