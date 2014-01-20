@@ -40,7 +40,7 @@
  Bundle 'thoughtbot/vim-rspec'
  " workflow 
  Bundle 'kien/ctrlp.vim'
- Bundle 'vim-scripts/EasyGrep'
+ Bundle 'rking/ag.vim'
  Bundle 'scrooloose/nerdtree'
  Bundle 'tomtom/tcomment_vim'
  Bundle 'MarcWeber/vim-addon-mw-utils'
