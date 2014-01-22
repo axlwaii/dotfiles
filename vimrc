@@ -1,19 +1,27 @@
-" setup vundle:  $ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-" Setting up Vundle - the vim plugin bundler
-  let iCanHazVundle=1
-  let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
-  if !filereadable(vundle_readme)
-      echo "Installing Vundle.."
-      echo ""
-      silent !mkdir -p ~/.vim/bundle
-      silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
-      let iCanHazVundle=0
-  endif
-" Setting up Vundle - the vim plugin bundler end
+ " ------------------------------------------ 
+ " Setting up Vundle - the vim plugin bundler
+ " ------------------------------------------
 
+ let iCanHazVundle=1
+ let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+
+ if !filereadable(vundle_readme)
+   echo "Installing Vundle.."
+   echo ""
+   silent !mkdir -p ~/.vim/bundle
+   silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+   let iCanHazVundle=0
+ endif
+
+ "-------------------------------------------
+ 
  if has("gui_macvim")
    set guioptions-=T                 "if using a GUI Version
  endif
+
+ "---------------
+ " VUNDLE CONFIG 
+ "---------------
 
  set nocompatible                    " be iMproved
  filetype off                        " required!
@@ -25,96 +33,87 @@
  " required!
  Bundle 'gmarik/vundle'
 
- " My Bundles here:
- "
- " look
+ " themes
  Bundle 'altercation/vim-colors-solarized'
- Bundle 'Yggdroot/indentLine'
  Bundle 'noahfrederick/vim-hemisu'
+ Bundle 'jonathanfilip/vim-lucius'
+ " Statusbar
  Bundle 'bling/vim-airline'
  Bundle 'edkolev/tmuxline.vim'
+ Bundle 'Yggdroot/indentLine'
  " languages 
  Bundle 'tpope/vim-rails.git'
+ Bundle 'thoughtbot/vim-rspec'
  Bundle 'tpope/vim-rvm'
  Bundle 'mattn/zencoding-vim'
- Bundle 'thoughtbot/vim-rspec'
  " workflow 
  Bundle 'kien/ctrlp.vim'
- Bundle 'rking/ag.vim'
  Bundle 'scrooloose/nerdtree'
  Bundle 'tomtom/tcomment_vim'
- Bundle 'MarcWeber/vim-addon-mw-utils'
  Bundle 'ervandew/supertab'
  Bundle 'tpope/vim-fugitive'
- Bundle 'tpope/vim-surround'
  Bundle 'scrooloose/syntastic'
  Bundle 'junegunn/vim-easy-align'
- " vim-scripts repos
- " Bundle 'L9'
- " non github repos
+ Bundle 'rking/ag.vim'
 
- filetype plugin indent on     " required!
- "
- " Brief help
- " :BundleList          - list configured bundles
- " :BundleInstall(!)    - install(update) bundles
- " :BundleSearch(!) foo - search(or refresh cache first) for foo
- " :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
- "
- " see :h vundle for more details or wiki for FAQ
- " NOTE: comments after Bundle command are not allowed..
+ filetype plugin indent on                              " required!
 
+ " -----------------------
+ " BASIC VIM CONFIGURATION
+ " -----------------------
 
- " BASIC CONFIGURATION
  syntax on
+
+ let mapleader = ","
+
  set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h14
- set number                          " always show linenumbers
+ set number                                             " always show linenumbers
  set backspace=indent,eol,start
- set noerrorbells visualbell t_vb=   "disabble these anoying error bells
- set nolist                          " dont show whitespace as dots
+ set noerrorbells visualbell t_vb=                      " disabble these anoying error bells
+ set nolist                                             " dont show whitespace as dots
  set hidden
- set mouse=a                         " Mouse support
+ set mouse=a                                            " Mouse support
  set clipboard=unnamed
  set wildmenu
  set wildmode=list:longest,full
  set fillchars+=stl:\ ,stlnc:\
- set encoding=utf-8                  " encoding UTF-8
+ set encoding=utf-8                                     " encoding UTF-8
  set t_Co=256
- set hls                             " highlight search
- set incsearch                       " start searching with the first letter
- set ts=2                            " Tabs are 2 spaces
- set bs=2                            " Backspace over everything in insert mode
- set shiftwidth=2                    " Tabs under smart indent
+ set hls                                                " highlight search
+ set incsearch                                          " start searching with the first letter
+ set ignorecase                                         " ignore case when searching
+ set ts=2                                               " Tabs are 2 spaces
+ set bs=2                                               " Backspace over everything in insert mode
+ set shiftwidth=2                                       " Tabs under smart indent
  set autoindent
- " set smarttab
+ set smarttab
  set expandtab
- " set cursorline
- set laststatus=2                    " always show statusline
-
- " When not using vim-airline
- " set statusline=%F%m%r%h%w\
- " set statusline+=%{fugitive#statusline()}\
- " set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
- " set statusline+=\ [line\ %l\/%L]
- " set statusline+=%{rvm#statusline()}
-
- " hi statusline ctermbg=White ctermfg=9
-
- let mapleader = ","
+ set ruler
+ set laststatus=2                                       " always show statusline
+ set notimeout                                          " Fix lag in iTerm.
+ set ttimeout
+ set timeoutlen=50
+ set nomodeline
  set nobackup                       " no backup
  set noswapfile                     " we don't need no ...
- " set backupdir=~/.vim/tmp
-
  set synmaxcol=256                  " syntax highlight is very slow in large columns
 
- "Plugin specific configurations
- let g:NERDTreeWinPos = "right"
+ " Solarized
+ let g:solarized_termcolors=256
+ 
+ " Default colorscheme
+ set background=light
+ colorscheme lucius
+
+ " --------------------
+ " PLUGIN CONFIGURATION
+ " --------------------
+
  let g:indentLine_color_term = 157
  
  " Configure syntastic
  let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['erlang', 'html', 'json'] }
  let g:syntastic_javascript_checkers = ['jshint']
-
 
  " Airline
  let g:airline_powerline_fonts = 1
@@ -122,50 +121,30 @@
  let g:airline_powerline_fonts = 1
  let g:airline_theme = 'solarized'
 
- " Solarized
- let g:solarized_termcolors=256
- " set background=dark
- " colorscheme solarized
- 
- " Hemisu
- set background=light
- colorscheme hemisu 
-
+ " CtrlP
  nnoremap <leader>f :CtrlPCurWD<CR>
  nnoremap <leader>F :CtrlP<CR>
  nnoremap <leader>r :CtrlPMRU<CR>
  nnoremap <leader>b :CtrlPBuffer<CR>
 
+ " NERDTree
+ let g:NERDTreeWinPos = "right"
  map <leader>n :NERDTreeToggle <CR>
- imap <C-space> <Esc>
 
  " Clear search
  map <leader>c :noh<CR>
 
  " Rspec test runner
  map <Leader>t :call RunCurrentSpecFile()<CR>
- map <Leader>s :call RunNearestSpec()<CR>
- map <Leader>l :call RunLastSpec()<CR>
- " map <Leader>a :call RunAllSpecs()<CR>
 
- """"""""""""""""""""
- "Filetype indention"
- """"""""""""""""""""
+ " Switch colorscheme dark/light
+ map <Leader>s :call SwitchColorScheme()<CR>
+
+ " ------------------
+ " Filetype indention
+ " ------------------
  autocmd FileType javascript setlocal shiftwidth=4 tabstop=4
-
- """""""""""""""""
- "Code completion"
- """""""""""""""""
- autocmd FileType python set omnifunc=pythoncomplete#Complete
- autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
- autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
- autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
- autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
- autocmd FileType css set omnifunc=csscomplete#CompleteCSS
- autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
- autocmd FileType php set omnifunc=phpcomplete#CompletePHP
- autocmd FileType c set omnifunc=ccomplete#Complete
- autocmd FileType cs set omnifunc=syntaxcomplete#Complete
+ autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
 
  "Get rid of whitespace after saving
  function! <SID>StripTrailingWhitespaces()
@@ -178,6 +157,16 @@
    " Clean up: restore previous search history, and cursor position
    let @/=_s
    call cursor(l, c)
+ endfunction
+
+ function! SwitchColorScheme()
+   if(&background == 'dark')
+     set background=light
+     colorscheme lucius 
+   else
+     set background=dark
+     colorscheme lucius
+   endif
  endfunction
 
  autocmd BufWritePre *.py,*.js,*.haml,*.rb,*.html,*.sass,*.scss :call <SID>StripTrailingWhitespaces()
