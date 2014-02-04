@@ -46,6 +46,7 @@
  Bundle 'thoughtbot/vim-rspec'
  Bundle 'tpope/vim-rvm'
  Bundle 'mattn/zencoding-vim'
+ Bundle 'pangloss/vim-javascript'
  " workflow 
  Bundle 'kien/ctrlp.vim'
  Bundle 'scrooloose/nerdtree'
@@ -53,7 +54,7 @@
  Bundle 'ervandew/supertab'
  Bundle 'tpope/vim-fugitive'
  Bundle 'scrooloose/syntastic'
- Bundle 'junegunn/vim-easy-align'
+ Bundle 'godlygeek/tabular'
  Bundle 'rking/ag.vim'
 
  filetype plugin indent on                              " required!
@@ -102,7 +103,7 @@
  let g:solarized_termcolors=256
  
  " Default colorscheme
- set background=light
+ set background=dark
  colorscheme lucius
 
  " --------------------
@@ -140,12 +141,18 @@
  " Switch colorscheme dark/light
  map <Leader>s :call SwitchColorScheme()<CR>
 
+ map <Leader># :AgFromSearch<CR>
+
  " ------------------
  " Filetype indention
  " ------------------
  autocmd FileType javascript setlocal shiftwidth=4 tabstop=4
  autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
 
+ " ---------
+ " Functions
+ " ---------
+ 
  "Get rid of whitespace after saving
  function! <SID>StripTrailingWhitespaces()
    " Preparation: save last search, and cursor position.
