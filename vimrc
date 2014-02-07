@@ -52,6 +52,7 @@
  Bundle 'scrooloose/nerdtree'
  Bundle 'tomtom/tcomment_vim'
  Bundle 'ervandew/supertab'
+ Bundle 'Lokaltog/vim-easymotion'
  Bundle 'tpope/vim-fugitive'
  Bundle 'scrooloose/syntastic'
  Bundle 'godlygeek/tabular'
@@ -139,7 +140,7 @@
  map <Leader>t :call RunCurrentSpecFile()<CR>
 
  " Switch colorscheme dark/light
- map <Leader>s :call SwitchColorScheme()<CR>
+ map <Leader>0 :call SwitchColorScheme()<CR>
 
  map <Leader># :AgFromSearch<CR>
 
