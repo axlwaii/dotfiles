@@ -39,7 +39,6 @@
  Bundle 'jonathanfilip/vim-lucius'
  " Statusbar
  Bundle 'bling/vim-airline'
- Bundle 'edkolev/tmuxline.vim'
  Bundle 'Yggdroot/indentLine'
  " languages 
  Bundle 'tpope/vim-rails.git'
@@ -48,6 +47,7 @@
  Bundle 'mattn/zencoding-vim'
  Bundle 'pangloss/vim-javascript'
  " workflow 
+ Bundle 'roman/golden-ratio'
  Bundle 'kien/ctrlp.vim'
  Bundle 'scrooloose/nerdtree'
  Bundle 'tomtom/tcomment_vim'
@@ -101,12 +101,21 @@
  set synmaxcol=256                  " syntax highlight is very slow in large columns
 
  " Solarized
- let g:solarized_termcolors=256
+ " let g:solarized_termcolors=256
  
  " Default colorscheme
  set background=dark
  colorscheme lucius
 
+ " --------------------------------------------                                                                        
+ " Easier split navigation                                                                                                                               
+ " --------------------------------------------                                                                     
+ " Use ctrl-[hjkl] to select the active split
+ nmap <silent> <c-k> :wincmd k<CR>                                                                                                                       
+ nmap <silent> <c-j> :wincmd j<CR>                                                                                                                       
+ nmap <silent> <c-h> :wincmd h<CR>                                                                                                                       
+ nmap <silent> <c-l> :wincmd l<CR>
+ 
  " --------------------
  " PLUGIN CONFIGURATION
  " --------------------
@@ -121,7 +130,7 @@
  let g:airline_powerline_fonts = 1
  let g:airline_solarized_reduced = 0
  let g:airline_powerline_fonts = 1
- let g:airline_theme = 'solarized'
+ let g:airline_theme = 'bubblegum'
 
  " CtrlP
  nnoremap <leader>f :CtrlPCurWD<CR>
@@ -141,7 +150,6 @@
 
  " Switch colorscheme dark/light
  map <Leader>0 :call SwitchColorScheme()<CR>
-
  map <Leader># :AgFromSearch<CR>
 
  " ------------------
