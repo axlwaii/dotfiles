@@ -133,6 +133,11 @@
  let g:airline_theme = 'bubblegum'
 
  " CtrlP
+ let g:ctrlp_custom_ignore = {
+   \ 'dir':  '\.git$\|\.yardoc\|public$|log\|tmp$',
+   \ 'file': '\.so$\|\.dat$|\.DS_Store$'
+   \ }
+ 
  nnoremap <leader>f :CtrlPCurWD<CR>
  nnoremap <leader>F :CtrlP<CR>
  nnoremap <leader>r :CtrlPMRU<CR>
