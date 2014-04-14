@@ -1,0 +1,3 @@
+[submodule "ze-best-zsh-config"]
+	path = ze-best-zsh-config
+	url = git@github.com:axlwaii/ze-best-zsh-config.git
