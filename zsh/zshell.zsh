@@ -1,11 +1,8 @@
 has_brew() { [[ -n ${commands[brew]} ]] }
 has_apt() { [[ -n ${commands[apt-get]} ]] }
-has_yum() { [[ -n ${commands[yum]} ]] }
 
-# DEPRECATED (!)
 HAS_BREW=`has_brew && echo 1 || echo 0`
 HAS_APT=`has_apt && echo 1 || echo 0`
-HAS_YUM=`has_yum && echo 1 || echo 0`
 
 # Settings
 autoload colors; colors;
@@ -88,10 +85,13 @@ else
             update_terminal_cwd() {};;
     esac
 fi
+
 # Prompt aliases for readability
+
 USER_NAME='%n'
 HOST_NAME='%m'
 DIR='%~'
+
 COLLAPSED_DIR() { # by Steve Losh
     echo $(pwd | sed -e "s,^$HOME,~,")
     local PWD_URL="file://$HOST_NAME${PWD// /%20}"
@@ -192,6 +192,16 @@ load_aliases() {
     alias wget='wget --no-check-certificate'
     alias beep='echo -n "\a"'
     alias lst="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'"
+
+    # rails related stuff
+    alias be='bundle exec'
+    alias be_spec='bundle exec rake spec'
+    alias rserver='rails server'
+    alias rtestdb='bundle exec rake db:test:clone && bundle exec rake db:test:prepare'
+    
+    # git relatet
+    alias gpull='git pull --rebase'
+    alias gpush='git push'
 }
 
 load_lol_aliases() {
@@ -200,19 +210,9 @@ load_lol_aliases() {
     alias onoz='cat /var/log/errors.log'
     alias rtfm='man'
     alias visible='echo'
-    alias invisible='cat'
-    alias moar='more'
-    alias icanhas='mkdir'
-    alias donotwant='rm'
-    alias dowant='cp'
-    alias gtfo='mv'
-    alias hai='cd'
-    alias plz='pwd'
-    alias inur='locate'
     alias nomz='ps aux | less'
     alias nomnom='killall'
     alias cya='reboot'
-    alias kthxbai='halt'
 }
 
 # Completion
