@@ -46,8 +46,12 @@
  Bundle 'tpope/vim-rvm'
  Bundle 'mattn/zencoding-vim'
  Bundle 'pangloss/vim-javascript'
+ Bundle 'digitaltoad/vim-jade'
+ Bundle 'groenewege/vim-less'
  " workflow 
+ Bundle 'vim-scripts/L9'
  Bundle 'roman/golden-ratio'
+ Bundle 'othree/vim-autocomplpop'
  Bundle 'kien/ctrlp.vim'
  Bundle 'scrooloose/nerdtree'
  Bundle 'tomtom/tcomment_vim'
