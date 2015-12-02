@@ -1,4 +1,4 @@
- " ------------------------------------------ 
+ " ------------------------------------------
  " Setting up Vundle - the vim plugin bundler
  " ------------------------------------------
 
@@ -14,13 +14,13 @@
  endif
 
  "-------------------------------------------
- 
+
  if has("gui_macvim")
    set guioptions-=T                 "if using a GUI Version
  endif
 
  "---------------
- " VUNDLE CONFIG 
+ " VUNDLE CONFIG
  "---------------
 
  set nocompatible                    " be iMproved
@@ -34,33 +34,38 @@
  Bundle 'gmarik/vundle'
 
  " themes
- Bundle 'altercation/vim-colors-solarized'
- Bundle 'noahfrederick/vim-hemisu'
- Bundle 'jonathanfilip/vim-lucius'
+ Plugin 'altercation/vim-colors-solarized'
+ Plugin 'noahfrederick/vim-hemisu'
+ Plugin 'jonathanfilip/vim-lucius'
  " Statusbar
- Bundle 'bling/vim-airline'
- Bundle 'Yggdroot/indentLine'
- " languages 
- Bundle 'tpope/vim-rails.git'
- Bundle 'thoughtbot/vim-rspec'
- Bundle 'tpope/vim-rvm'
- Bundle 'mattn/zencoding-vim'
- Bundle 'pangloss/vim-javascript'
- Bundle 'digitaltoad/vim-jade'
- Bundle 'groenewege/vim-less'
- " workflow 
- Bundle 'vim-scripts/L9'
- Bundle 'roman/golden-ratio'
- Bundle 'othree/vim-autocomplpop'
- Bundle 'kien/ctrlp.vim'
- Bundle 'scrooloose/nerdtree'
- Bundle 'tomtom/tcomment_vim'
- Bundle 'ervandew/supertab'
- Bundle 'Lokaltog/vim-easymotion'
- Bundle 'tpope/vim-fugitive'
- Bundle 'scrooloose/syntastic'
- Bundle 'godlygeek/tabular'
- Bundle 'rking/ag.vim'
+ Plugin 'bling/vim-airline'
+ Plugin 'Yggdroot/indentLine'
+ " config
+ Plugin 'editorconfig/editorconfig-vim'
+ " languages
+ " l: ruby
+ Plugin 'tpope/vim-rails.git'
+ Plugin 'thoughtbot/vim-rspec'
+ Plugin 'tpope/vim-rvm'
+ " l: JS
+ Plugin 'pangloss/vim-javascript'
+ Plugin 'mxw/vim-jsx'
+ Plugin 'isRuslan/vim-es6'
+ " l: elixir
+ Plugin 'elixir-lang/vim-elixir'
+ " workflow
+ Plugin 'vim-scripts/L9'
+ Plugin 'roman/golden-ratio'
+ Plugin 'othree/vim-autocomplpop'
+ Plugin 'kien/ctrlp.vim'
+ Plugin 'scrooloose/nerdtree'
+ Plugin 'tomtom/tcomment_vim'
+ Plugin 'ervandew/supertab'
+ Plugin 'Lokaltog/vim-easymotion'
+ Plugin 'tpope/vim-fugitive'
+ Plugin 'scrooloose/syntastic'
+ Plugin 'godlygeek/tabular'
+ Plugin 'rking/ag.vim'
 
  filetype plugin indent on                              " required!
 
@@ -83,7 +88,7 @@
  set wildmenu
  set wildmode=list:longest,full
  set fillchars+=stl:\ ,stlnc:\
- set encoding=utf-8                                     " encoding UTF-8
+ "  set encoding=utf-8                                     " encoding UTF-8
  set t_Co=256
  set hls                                                " highlight search
  set incsearch                                          " start searching with the first letter
@@ -106,26 +111,27 @@
 
  " Solarized
  " let g:solarized_termcolors=256
- 
- " Default colorscheme
- set background=dark
- colorscheme lucius
 
- " --------------------------------------------                                                                        
- " Easier split navigation                                                                                                                               
- " --------------------------------------------                                                                     
+ " Default colorscheme
+ " set background=dark
+ " colorscheme lucius
+ colorscheme slate
+
+ " --------------------------------------------
+ " Easier split navigation
+ " --------------------------------------------
  " Use ctrl-[hjkl] to select the active split
- nmap <silent> <c-k> :wincmd k<CR>                                                                                                                       
- nmap <silent> <c-j> :wincmd j<CR>                                                                                                                       
- nmap <silent> <c-h> :wincmd h<CR>                                                                                                                       
+ nmap <silent> <c-k> :wincmd k<CR>
+ nmap <silent> <c-j> :wincmd j<CR>
+ nmap <silent> <c-h> :wincmd h<CR>
  nmap <silent> <c-l> :wincmd l<CR>
- 
+
  " --------------------
  " PLUGIN CONFIGURATION
  " --------------------
 
  let g:indentLine_color_term = 157
- 
+
  " Configure syntastic
  let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['erlang', 'html', 'json'] }
  let g:syntastic_javascript_checkers = ['jshint']
@@ -141,7 +147,7 @@
    \ 'dir':  '\.git$\|\.yardoc\|public$|log\|tmp$',
    \ 'file': '\.so$\|\.dat$|\.DS_Store$'
    \ }
- 
+
  nnoremap <leader>f :CtrlPCurWD<CR>
  nnoremap <leader>F :CtrlP<CR>
  nnoremap <leader>r :CtrlPMRU<CR>
@@ -170,7 +176,7 @@
  " ---------
  " Functions
  " ---------
- 
+
  "Get rid of whitespace after saving
  function! <SID>StripTrailingWhitespaces()
    " Preparation: save last search, and cursor position.
@@ -187,11 +193,12 @@
  function! SwitchColorScheme()
    if(&background == 'dark')
      set background=light
-     colorscheme lucius 
+     colorscheme hemisu
    else
      set background=dark
-     colorscheme lucius
+     colorscheme hemisu
    endif
  endfunction
 
  autocmd BufWritePre *.py,*.js,*.haml,*.rb,*.html,*.sass,*.scss :call <SID>StripTrailingWhitespaces()
+au BufRead, BufNewFile *.es6 set filetype=javascript
