@@ -34,9 +34,7 @@
  Bundle 'gmarik/vundle'
 
  " themes
- Plugin 'altercation/vim-colors-solarized'
- Plugin 'noahfrederick/vim-hemisu'
- Plugin 'jonathanfilip/vim-lucius'
+ Plugin 'flazz/vim-colorschemes'
  " Statusbar
  Plugin 'bling/vim-airline'
  Plugin 'Yggdroot/indentLine'
@@ -53,6 +51,8 @@
  Plugin 'isRuslan/vim-es6'
  " l: elixir
  Plugin 'elixir-lang/vim-elixir'
+ " l: html
+ Plugin 'mattn/emmet-vim'
  " workflow
  Plugin 'vim-scripts/L9'
  Plugin 'roman/golden-ratio'
@@ -113,9 +113,15 @@
  " let g:solarized_termcolors=256
 
  " Default colorscheme
- " set background=dark
- " colorscheme lucius
- colorscheme slate
+ colorscheme harlequin
+
+ " aliases
+ command WQ wq
+ command Wq wq
+ command QA qa
+ command Qa qa
+ command W w
+ command Q q
 
  " --------------------------------------------
  " Easier split navigation
@@ -200,5 +206,5 @@
    endif
  endfunction
 
- " autocmd BufWritePre *.py,*.js,*.haml,*.rb,*.html,*.sass,*.scss :call <SID>StripTrailingWhitespaces()
+ autocmd BufWritePre *.js,*.rb,*.scss :call <SID>StripTrailingWhitespaces()
  au BufRead, BufNewFile *.es6 set filetype=javascript
