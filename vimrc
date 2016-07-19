@@ -35,8 +35,9 @@
 
  " themes
  Plugin 'flazz/vim-colorschemes'
+ Plugin 'vim-airline/vim-airline-themes'
  " Statusbar
- Plugin 'bling/vim-airline'
+ Plugin 'vim-airline/vim-airline'
  Plugin 'Yggdroot/indentLine'
  " config
  Plugin 'editorconfig/editorconfig-vim'
@@ -53,6 +54,8 @@
  Plugin 'elixir-lang/vim-elixir'
  " l: html
  Plugin 'mattn/emmet-vim'
+ " l: elm
+ Plugin 'lambdatoast/elm.vim'
  " workflow
  Plugin 'vim-scripts/L9'
  Plugin 'roman/golden-ratio'
@@ -154,6 +157,9 @@
    \ 'file': '\.so$\|\.dat$|\.DS_Store$'
    \ }
 
+ " EditorConfig
+ let g:EditorConfig_core_mode = 'external_command'
+
  nnoremap <leader>f :CtrlPCurWD<CR>
  nnoremap <leader>F :CtrlP<CR>
  nnoremap <leader>r :CtrlPMRU<CR>
@@ -176,8 +182,8 @@
  " ------------------
  " Filetype indention
  " ------------------
-"  autocmd FileType javascript setlocal shiftwidth=4 tabstop=4
-"  autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
+ "  autocmd FileType javascript setlocal shiftwidth=4 tabstop=4
+ "  autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
 
  " ---------
  " Functions
