@@ -56,10 +56,13 @@
  Plugin 'mattn/emmet-vim'
  " l: elm
  Plugin 'lambdatoast/elm.vim'
+ " l: css
+ Plugin 'csscomb/vim-csscomb'
  " workflow
  Plugin 'vim-scripts/L9'
  Plugin 'roman/golden-ratio'
- Plugin 'Valloric/YouCompleteMe'
+ Plugin 'terryma/vim-multiple-cursors'
+ Plugin 'vim-scripts/AutoComplPop'
  Plugin 'kien/ctrlp.vim'
  Plugin 'scrooloose/nerdtree'
  Plugin 'tomtom/tcomment_vim'
@@ -71,7 +74,7 @@
  Plugin 'rking/ag.vim'
 
  filetype plugin indent on                              " required!
-
+ 
  " -----------------------
  " BASIC VIM CONFIGURATION
  " -----------------------
@@ -90,6 +93,7 @@
  set clipboard=unnamed
  set wildmenu
  set wildmode=list:longest,full
+ set wildignore=.git,*.swp,*/tmp/*
  set fillchars+=stl:\ ,stlnc:\
  "  set encoding=utf-8                                     " encoding UTF-8
  set t_Co=256
@@ -116,7 +120,8 @@
  " let g:solarized_termcolors=256
 
  " Default colorscheme
- colorscheme harlequin
+ "  colorscheme harlequin
+ colorscheme made_of_code
 
  " aliases
  command WQ wq
@@ -139,11 +144,22 @@
  " PLUGIN CONFIGURATION
  " --------------------
 
+ " Speed Up neovim startup
+ let g:python_host_skip_check = 1
+ let g:python3_host_skip_check = 1
+
+ let g:python_host_prog='/usr/local/bin/python2'
+ let g:python3_host_prog='/usr/local/bin/python3'
+
  let g:indentLine_color_term = 157
 
  " Configure syntastic
  let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['erlang', 'html', 'json'] }
  let g:syntastic_javascript_checkers = ['jshint']
+ let g:syntastic_scss_checkers = ['scss_lint']
+ let g:syntastic_check_on_open = 0
+ let g:syntastic_check_on_wq = 0
+ let g:syntastic_aggregate_errors = 1
 
  " Airline
  let g:airline_powerline_fonts = 1
@@ -159,6 +175,16 @@
 
  " EditorConfig
  let g:EditorConfig_core_mode = 'external_command'
+ let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+ let g:EditorConfig_exec_path = '/usr/local/bin/editorconfig'
+
+ " Systastic
+ set statusline+=%#warningmsg#
+ set statusline+=%{SyntasticStatuslineFlag()}
+ set statusline+=%*
+
+ let g:syntastic_always_populate_loc_list = 1
+ let g:syntastic_auto_loc_list = 1
 
  nnoremap <leader>f :CtrlPCurWD<CR>
  nnoremap <leader>F :CtrlP<CR>
@@ -178,6 +204,17 @@
  " Switch colorscheme dark/light
  map <Leader>0 :call SwitchColorScheme()<CR>
  map <Leader># :AgFromSearch<CR>
+
+  " autocmd BufWritePre *.js,*.rb,*.scss :call <SID>StripTrailingWhitespaces()
+ au BufRead,BufNewFile *.es6  set filetype=javascript
+"  au BufNewFile,BufRead *.scss set filetype=css
+
+ au FileType scss set omnifunc=csscomplete#CompleteCSS
+ au FileType es6  set omnifunc=javascriptcomplete#CompleteJavascript
+
+ " Omni Completion
+ set completeopt=longest,menuone
+"  set omnifunc=syntaxcomplete#Complete
 
  " ------------------
  " Filetype indention
