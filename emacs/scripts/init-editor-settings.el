@@ -2,6 +2,9 @@
 (set-language-environment "utf-8")
 (prefer-coding-system 'utf-8)
 
+;; use system clipboard
+(setq x-select-enable-clipboard t)
+
 ;; disable auto-save and auto-backup
 (setq auto-save-default nil)
 (setq make-backup-files nil)
@@ -52,10 +55,6 @@
   (defun track-mouse (e))
   (setq mouse-sel-mode t)
   )
-
-(if window-system
-    ((tool-bar-mode -1)
-    (scroll-bar-mode -1)))
 
 ;; THEME
 ;;(load-theme 'badger t)

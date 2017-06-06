@@ -40,5 +40,21 @@
         (error "Cannot open tramp file")
       (browse-url (concat "file://" file-name)))))
 
+;;----------------------------------------------------------------------------
+;; Copy and paste
+;;----------------------------------------------------------------------------
+(defun pbcopy ()
+  (interactive)
+  (let ((deactivate-mark t))
+    (call-process-region (point) (mark) "pbcopy")))
+
+(defun pbpaste ()
+  (interactive)
+  (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
+
+(defun pbcut ()
+  (interactive)
+  (pbcopy)
+  (delete-region (region-beginning) (region-end)))
 
 (provide 'init-utils)

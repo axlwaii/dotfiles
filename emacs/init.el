@@ -35,9 +35,11 @@
 
 ;; Setup
 
-(add-to-list 'load-path (expand-file-name "config" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "scripts" user-emacs-directory))
 
 ;; Load configs
+
+(require 'init-server)
 
 (require 'init-utils)
 (require 'init-line-numbers)
@@ -62,3 +64,5 @@
 (require 'init-javascript)
 (require 'init-scss)
 (require 'init-skewer)
+
+(require 'sort-css)
