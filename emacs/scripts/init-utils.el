@@ -1,3 +1,26 @@
+
+;;----------------------------------------------------------------------------
+;; Kill all buffers except of the current one
+;;----------------------------------------------------------------------------
+(defun copy-line (arg)
+  "Copy lines (as many as prefix argument) in the kill ring"
+  (interactive "p")
+  (kill-ring-save (line-beginning-position)
+                  (line-beginning-position (+ 1 arg)))
+  (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
+
+(global-set-key (kbd "C-c C-k") 'copy-line)
+(global-set-key (kbd "C-c C-d") 'kill-whole-line)
+
+;;----------------------------------------------------------------------------
+;; Kill all buffers except of the current one
+;;----------------------------------------------------------------------------
+(defun kill-other-buffers ()
+    "Kill all other buffers."
+    (interactive)
+    (mapc 'kill-buffer
+          (delq (current-buffer)
+                (remove-if-not 'buffer-file-name (buffer-list)))))
 ;;----------------------------------------------------------------------------
 ;; Delete the current file
 ;;----------------------------------------------------------------------------
@@ -17,7 +40,7 @@
 ;;----------------------------------------------------------------------------
 (defun rename-this-file-and-buffer (new-name)
   "Renames both current buffer and file it's visiting to NEW-NAME."
-  (interactive "sNew name: ")
+  (interactive "New name: ")
   (let ((name (buffer-name))
         (filename (buffer-file-name)))
     (unless filename

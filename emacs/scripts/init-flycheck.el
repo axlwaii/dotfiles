@@ -5,7 +5,10 @@
 ;; disable javascript-jshint
 (setq-default flycheck-disabled-checkers
               (append flycheck-disabled-checkers
-                      '(javascript-jshint)))
+                      '(javascript-jshint ruby-rubylint)))
+
+(setq flycheck-display-errors-function
+      #'flycheck-display-error-messages-unless-error-list)
 
 ;; use local eslint from node_modules before global
 ;; http://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable

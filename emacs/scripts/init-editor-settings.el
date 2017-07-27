@@ -35,6 +35,13 @@
 (show-paren-mode 1)
 (setq show-paren-delay 0)
 
+;; Turn on the search-highlighting feature
+(setq search-highlight 1)
+
+;; Case-insensitive searching
+(setq-default case-fold-search t)
+(setq case-fold-search t)
+
 ;; force vertical split windows
 (setq split-width-threshold nil)
 (setq split-height-threshold 0)
@@ -55,6 +62,22 @@
   (defun track-mouse (e))
   (setq mouse-sel-mode t)
   )
+
+;; improve garbage collection
+(defun my-minibuffer-setup-hook ()
+  (setq gc-cons-threshold most-positive-fixnum))
+
+(defun my-minibuffer-exit-hook ()
+  (setq gc-cons-threshold 10000000))
+
+(setq gc-cons-threshold 10000000)
+
+(add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+(add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+
+(recentf-mode 1)
+(setq recentf-max-menu-items 15)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 ;; THEME
 ;;(load-theme 'badger t)

@@ -1,10 +1,15 @@
 ;; IDO CONFIG
 (require 'ido)
-(ido-mode t)
+(require 'ido-vertical-mode)
+(require 'flx-ido)
 
-;; Use the current window when visiting files and buffers with ido
-(setq ido-default-file-method 'selected-window)
-(setq ido-default-buffer-method 'selected-window)
+(ido-mode 1)
+(ido-everywhere 1)
+(ido-vertical-mode 1)
+(flx-ido-mode 1)
+
+(setq ido-vertical-define-keys 'C-n-and-C-p-only)
+(setq ido-ignore-directories '("node_modules" "tmp" ".git"))
 
 ;; disable ido faces to see flx highlights.
 (setq ido-enable-flex-matching t)

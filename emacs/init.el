@@ -22,7 +22,7 @@
     ("9b402e9e8f62024b2e7f516465b63a4927028a7055392290600b776e4a5b9905" default)))
  '(package-selected-packages
    (quote
-    (css-comb skewer-mode simple-httpd arjen-grey-theme anzu multiple-cursors rspec-mode helm-projectile helm-cmd-t helm base16-theme ag cider scss-mode js2-mode flycheck auto-complete editorconfig)))
+    (browse-kill-ring helm-flx ido-vertical-mode flx-ido flx powerline css-comb skewer-mode simple-httpd arjen-grey-theme anzu multiple-cursors rspec-mode helm-projectile helm base16-theme ag cider scss-mode js2-mode flycheck auto-complete editorconfig)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -31,14 +31,13 @@
  ;; If there is more than one, they won't work right.
  )
 
+(require 'cl)
 (require 'json)
-
 ;; Setup
 
 (add-to-list 'load-path (expand-file-name "scripts" user-emacs-directory))
 
 ;; Load configs
-
 (require 'init-server)
 
 (require 'init-utils)
@@ -65,4 +64,8 @@
 (require 'init-scss)
 (require 'init-skewer)
 
+(require 'init-powerline)
+
 (require 'sort-css)
+
+(require 'init-keymappings)

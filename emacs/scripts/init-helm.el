@@ -1,18 +1,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; helm
-(require 'helm)
-(require 'helm-config)
-(require 'helm-cmd-t)
+;; (require 'helm)
+;; (require 'helm-config)
+;; (require 'helm-flx)
 
+;; (helm-flx-mode +1)
 
-(global-set-key (kbd "C-x C-f") 'helm-projectile-find-file-dwim)
-(global-set-key (kbd "C-x C-b") 'helm-buffers-list)
-(global-set-key (kbd "C-x C-d") 'dired)
+;; (setq helm-flx-for-helm-find-files t ;; t by default
+;;       helm-flx-for-helm-locate t) ;; nil by default
 
-;;hooks
+;; (global-set-key (kbd "M-x") 'helm-M-x)
+;; (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+;; (global-set-key (kbd "C-x C-f") 'helm-find)
+;; (global-set-key (kbd "C-x C-p") 'helm-projectile-find-file-dwim)
+;; (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+;; (global-set-key (kbd "C-x C-d") 'dired)
 
-;; (add-hook 'find-file-hook
-;;           (lambda ()
-;;             (setq default-directory command-line-default-directory)))
-
+;; hooks
 (provide 'init-helm)
