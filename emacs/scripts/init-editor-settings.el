@@ -3,7 +3,10 @@
 (prefer-coding-system 'utf-8)
 
 ;; use system clipboard
-(setq x-select-enable-clipboard t)
+(setq ns-right-option-modifier nil
+      ns-left-option-modifier 'meta
+      ;;ns-command-modifier 'meta
+      x-select-enable-clipboard t)
 
 ;; disable auto-save and auto-backup
 (setq auto-save-default nil)
@@ -12,13 +15,8 @@
 ;; use spaces instead of tabs
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
+
 (setq indent-line-function 'insert-tab)
-
-;; make tab key always call a indent command.
-(setq-default tab-always-indent t)
-
-;; make tab key call indent command or insert tab character, depending on cursor position
-(setq-default tab-always-indent nil)
 
 ;; make tab key do indent first then completion.
 (setq-default tab-always-indent 'complete)
@@ -27,9 +25,6 @@
 (setq ring-bell-function 'ignore)
 ;; disable startup splashscreen
 (setq inhibit-startup-message t)
-
-;; menubar
-(menu-bar-mode -1)
 
 ;; show parens
 (show-paren-mode 1)
@@ -81,7 +76,22 @@
 
 ;; THEME
 ;;(load-theme 'badger t)
-(load-theme 'base16-summerfruit-dark t)
 ;;(load-theme 'arjen-grey t)
+
+  (if window-system
+    (progn (tool-bar-mode -1)
+           (scroll-bar-mode -1)
+           (load-theme 'misterioso t)
+           (menu-bar-mode t))
+    (progn (load-theme 'base16-summerfruit-dark t)
+           (menu-bar-mode -1)))
+
+(set-cursor-color "#98ff98")
+
+(blink-cursor-mode 1)
+
+;; use load path from shell
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
 (provide 'init-editor-settings)

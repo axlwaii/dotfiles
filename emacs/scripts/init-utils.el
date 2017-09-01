@@ -1,4 +1,3 @@
-
 ;;----------------------------------------------------------------------------
 ;; Kill all buffers except of the current one
 ;;----------------------------------------------------------------------------
@@ -21,6 +20,7 @@
     (mapc 'kill-buffer
           (delq (current-buffer)
                 (remove-if-not 'buffer-file-name (buffer-list)))))
+
 ;;----------------------------------------------------------------------------
 ;; Delete the current file
 ;;----------------------------------------------------------------------------
@@ -33,7 +33,6 @@
                              (file-name-nondirectory buffer-file-name)))
     (delete-file (buffer-file-name))
     (kill-this-buffer)))
-
 
 ;;----------------------------------------------------------------------------
 ;; Rename the current file

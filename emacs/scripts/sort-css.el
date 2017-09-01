@@ -141,6 +141,7 @@
                                  "box-sizing"
                                  "-webkit-overflow-scrollin"
                                  " "
+                                 ""
                                  ))
 
 
@@ -171,13 +172,6 @@
     (if (= (length selection) 0)
         (message "nothing selected")
       (replace-string selection (sort-css-modified-selection selection)))))
-      ;;;(message selection))))
-
-;; (require 'ert)
-
-;; (ert-deftest sort-css-compare ()
-;;   (should
-;;    equal (sort-css-order '("position" display)) '("display" "position")))
 
 (provide 'sort-css)
 ;;; sort-css ends here
