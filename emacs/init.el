@@ -59,7 +59,7 @@
 (require 'init-dot-mode)
 
 (require 'init-ruby)
-(require 'init-rvm)
+;;(require 'init-rvm)
 (require 'init-rspec)
 
 (require 'init-webmode)

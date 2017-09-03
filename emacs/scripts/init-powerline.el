@@ -38,17 +38,67 @@
               ;; " "
               ;; %l print the current line number
               ;; %c print the current column
-              (line-number-mode ("  %l" (column-number-mode ":%c ")))))
+              (line-number-mode (" L: %l" (column-number-mode ":%c ")))))
 
-;; set modeline
+(display-time-mode t)
+(timeclock-mode-line-display)
 
-(setq-default mode-line-format
-      '("%e"
+;; make and set faces
+(make-face 'mode-line-mode-face)
+(make-face 'mode-line-position-face)
+(set-face-attribute 'mode-line-mode-face nil :foreground "#98FFCC")
+(set-face-attribute 'mode-line-position-face nil :background "#444" :foreground "white")
+
+(set-face-attribute 'mode-line           nil :background "#333")
+(set-face-attribute 'mode-line-buffer-id nil :background "#444" :foreground "white")
+
+(set-face-attribute 'mode-line-highlight nil :box nil :background "#999")
+(set-face-attribute 'mode-line-inactive  nil :inherit 'default)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; mode-line alignment helper
+;; thanks to https://emacs.stackexchange.com/questions/16654/how-to-re-arrange-things-in-mode-line
+
+(defun mode-line-fill-right (face reserve)
+  "Return empty space using FACE and leaving RESERVE space on the right."
+  (unless reserve
+    (setq reserve 20))
+  (when (and window-system (eq 'right (get-scroll-bar-mode)))
+    (setq reserve (- reserve 3)))
+  (propertize " "
+              'display `((space :align-to (- (+ right right-fringe right-margin) ,reserve)))
+              'face face))
+
+
+(defun mode-line-fill-center (face reserve)
+  "Return empty space using FACE to the center of remaining space leaving RESERVE space on the right."
+  (unless reserve
+    (setq reserve 20))
+  (when (and window-system (eq 'right (get-scroll-bar-mode)))
+    (setq reserve (- reserve 3)))
+  (propertize " "
+              'display `((space :align-to (- (+ center (.5 . right-margin)) ,reserve
+                                             (.5 . left-margin))))
+              'face face))
+
+
+(defconst RIGHT_PADDING 1)
+
+(defun reserve-left/middle ()
+  (/ (length (format-mode-line mode-line-align-middle)) 2))
+
+(defun reserve-middle/right ()
+  (+ RIGHT_PADDING (length (format-mode-line mode-line-align-right))))
+
+;; modelines by alignment
+
+(setq mode-line-align-left
+      '(""
+        " "
         mode-line-front-space
         ;; mode-line-mule-info
         mode-line-client
         mode-line-modified
-
         " "
         ;; display mode of file
         ;; mode-line-mode
@@ -64,24 +114,33 @@
         mode-line-buffer-identification
         " "
         (flycheck-mode flycheck-mode-line)
-        " "
-        mode-line-misc-info
+        " "))
+
+(setq mode-line-align-middle
+      '(""
+        ))
+
+(setq mode-line-align-right
+      '(""
         (:propertize mode-line-position
                      face mode-line-position-face)
+        " "
+        mode-line-misc-info
+        mode-line-end-spaces
+        ))
 
-        mode-line-end-spaces))
+;; set modeline
 
-;; make and set faces
-(make-face 'mode-line-mode-face)
-(make-face 'mode-line-position-face)
-(set-face-attribute 'mode-line-mode-face nil :foreground "#98FFCC")
-(set-face-attribute 'mode-line-position-face nil :background "#444" :foreground "white")
-
-(set-face-attribute 'mode-line           nil :background "#333")
-(set-face-attribute 'mode-line-buffer-id nil :background "#444" :foreground "white")
-
-(set-face-attribute 'mode-line-highlight nil :box nil :background "#999")
-(set-face-attribute 'mode-line-inactive  nil :inherit 'default)
-
+(setq-default mode-line-format
+              (list
+               mode-line-align-left
+               '(:eval (mode-line-fill-center 'mode-line
+                                              (reserve-left/middle)))
+               mode-line-align-middle
+               '(:eval
+                 (mode-line-fill-right 'mode-line
+                                       (reserve-middle/right)))
+               mode-line-align-right
+               ))
 
 (provide 'init-powerline)
