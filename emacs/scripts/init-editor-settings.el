@@ -77,14 +77,14 @@
 ;; THEME
 ;;(load-theme 'badger t)
 ;;(load-theme 'arjen-grey t)
-
-  (if window-system
-    (progn (tool-bar-mode -1)
-           (scroll-bar-mode -1)
-           (load-theme 'misterioso t)
-           (menu-bar-mode t))
-    (progn (load-theme 'base16-summerfruit-dark t)
-           (menu-bar-mode -1)))
+(load-theme 'nord t)
+  ;; (if window-system
+  ;;   (progn (tool-bar-mode -1)
+  ;;          (scroll-bar-mode -1)
+  ;;          (load-theme 'monokai t)
+  ;;          (menu-bar-mode t))
+  ;;   (progn (load-theme 'base16-summerfruit-dark t)
+  ;;          (menu-bar-mode -1)))
 
 (set-cursor-color "#98ff98")
 

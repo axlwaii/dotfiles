@@ -19,10 +19,10 @@
  '(anzu-search-threshold 1000)
  '(custom-safe-themes
    (quote
-    ("73a13a70fd111a6cd47f3d4be2260b1e4b717dbf635a9caee6442c949fad41cd" default)))
+    ("c4bd8fa17f1f1fc088a1153ca676b1e6abc55005e72809ad3aeffb74bd121d23" "3629b62a41f2e5f84006ff14a2247e679745896b5eaa1d5bcfbc904a3441b0cd" "73a13a70fd111a6cd47f3d4be2260b1e4b717dbf635a9caee6442c949fad41cd" default)))
  '(package-selected-packages
    (quote
-    (exec-path-from-shell dot-mode airline-themes dracula-theme projectile projectile-rails web-mode magit browse-kill-ring ido-vertical-mode flx-ido flx powerline skewer-mode simple-httpd arjen-grey-theme anzu multiple-cursors rspec-mode base16-theme ag cider js2-mode flycheck auto-complete editorconfig)))
+    (nord-theme multi-term monokai-theme exec-path-from-shell dot-mode airline-themes dracula-theme projectile projectile-rails web-mode magit browse-kill-ring ido-vertical-mode flx-ido flx powerline skewer-mode simple-httpd arjen-grey-theme anzu multiple-cursors rspec-mode base16-theme ag cider js2-mode flycheck auto-complete editorconfig)))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -40,6 +40,7 @@
 
 ;; Load configs
 (require 'init-server)
+(require 'init-term)
 
 (require 'init-utils)
 (require 'init-line-numbers)

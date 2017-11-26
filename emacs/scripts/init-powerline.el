@@ -1,8 +1,23 @@
 (column-number-mode 1)
-;; groups
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; COLORS
+;;;
+;;; Using the NORD - Theme
+;;; https://github.com/arcticicestudio/nord/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconst nord-polar-night-palette '("#2E3440" "#3B4252" "#434C5E" "#4C566A"))
+(defconst nord-frost-palette       '("#8FBCBB" "#88C0D0" "#81A1C1" "#5E81AC"))
+
+(defvar main-bg-color      (nth 2 nord-polar-night-palette))
+(defvar secondary-bg-color (nth 3 nord-polar-night-palette))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 (defface mode-line-directory
-  '((t :background "#444" :foreground "#999"))
+  '((t :background "#4C566A" :foreground "#ccc"))
   "Face used for buffer identification parts of the mode line."
   :group 'mode-line-faces
   :group 'basic-faces)
@@ -47,12 +62,12 @@
 (make-face 'mode-line-mode-face)
 (make-face 'mode-line-position-face)
 (set-face-attribute 'mode-line-mode-face nil :foreground "#98FFCC")
-(set-face-attribute 'mode-line-position-face nil :background "#444" :foreground "white")
+(set-face-attribute 'mode-line-position-face nil :background secondary-bg-color :foreground "white")
 
-(set-face-attribute 'mode-line           nil :background "#333")
-(set-face-attribute 'mode-line-buffer-id nil :background "#444" :foreground "white")
+(set-face-attribute 'mode-line           nil :background main-bg-color)
+(set-face-attribute 'mode-line-buffer-id nil :background secondary-bg-color :foreground "white")
 
-(set-face-attribute 'mode-line-highlight nil :box nil :background "#999")
+(set-face-attribute 'mode-line-highlight nil :box "#fff" :background "#999")
 (set-face-attribute 'mode-line-inactive  nil :inherit 'default)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
