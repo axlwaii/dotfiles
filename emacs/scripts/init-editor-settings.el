@@ -2,6 +2,9 @@
 (set-language-environment "utf-8")
 (prefer-coding-system 'utf-8)
 
+;; set font
+(set-default-font "DejaVu Sans Mono for Powerline-14")
+
 ;; use system clipboard
 (setq ns-right-option-modifier nil
       ns-left-option-modifier 'meta
@@ -11,6 +14,17 @@
 ;; disable auto-save and auto-backup
 (setq auto-save-default nil)
 (setq make-backup-files nil)
+
+;; Save buffer whe out of focus
+(defun save-all ()
+  (interactive)
+  (save-some-buffers t))
+
+(add-hook 'focus-out-hook 'save-all)
+
+;; cleaner buffers
+;; Makes *scratch* empty.
+(setq initial-scratch-message "")
 
 ;; use spaces instead of tabs
 (setq-default indent-tabs-mode nil)
@@ -77,14 +91,13 @@
 ;; THEME
 ;;(load-theme 'badger t)
 ;;(load-theme 'arjen-grey t)
-(load-theme 'nord t)
-  ;; (if window-system
-  ;;   (progn (tool-bar-mode -1)
-  ;;          (scroll-bar-mode -1)
-  ;;          (load-theme 'monokai t)
-  ;;          (menu-bar-mode t))
-  ;;   (progn (load-theme 'base16-summerfruit-dark t)
-  ;;          (menu-bar-mode -1)))
+(if window-system
+    (progn (tool-bar-mode -1)
+           (scroll-bar-mode -1)
+           (load-theme 'seti t)
+           (menu-bar-mode t))
+    (progn (load-theme 'base16-summerfruit-dark t)
+           (menu-bar-mode -1)))
 
 (set-cursor-color "#98ff98")
 

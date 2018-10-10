@@ -1,5 +1,5 @@
 ;; auto-complete
-(require 'auto-complete)
+(autoload 'auto-complete "autoload")
 (ac-config-default)
 (set-face-attribute 'ac-candidate-face nil   :background "#111111" :foreground "light gray")
 (set-face-attribute 'ac-selection-face nil   :background "#333333" :foreground "white")

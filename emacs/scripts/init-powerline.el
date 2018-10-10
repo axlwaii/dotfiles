@@ -64,7 +64,7 @@
 (set-face-attribute 'mode-line-mode-face nil :foreground "#98FFCC")
 (set-face-attribute 'mode-line-position-face nil :background secondary-bg-color :foreground "white")
 
-(set-face-attribute 'mode-line           nil :background main-bg-color)
+(set-face-attribute 'mode-line           nil :background "#111")
 (set-face-attribute 'mode-line-buffer-id nil :background secondary-bg-color :foreground "white")
 
 (set-face-attribute 'mode-line-highlight nil :box "#fff" :background "#999")

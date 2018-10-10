@@ -1,5 +1,5 @@
 ;; Rspec
-(require 'rspec-mode)
+(autoload 'rspec-mode "rspec-mode")
 (setq-default rspec-use-rvm t)
 
 ;; use bash to run tests as adviced

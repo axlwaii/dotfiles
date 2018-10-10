@@ -48,15 +48,20 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
-(require 'cl)
-(require 'json)
-;; Setup
 ; install the missing packages
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
 
+(autoload 'cl "cl")
+(autoload 'json "json")
+
+;; Setup
 (add-to-list 'load-path (expand-file-name "scripts" user-emacs-directory))
+
+;; enable so long by default
+(when (require 'so-long nil :noerror)
+  (so-long-enable))
 
 ;; Load configs
 (require 'init-server)
@@ -65,7 +70,6 @@
 (require 'init-utils)
 (require 'init-line-numbers)
 (require 'init-hl-line)
-(require 'init-text)
 (require 'init-whitespace)
 (require 'init-editor-config)
 (require 'init-editor-settings)

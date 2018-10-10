@@ -1,5 +1,5 @@
 ;; anzu
-(require 'anzu)
+(autoload 'anzu "anzu")
 (global-anzu-mode +1)
 
 (set-face-attribute 'anzu-mode-line nil
