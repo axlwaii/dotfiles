@@ -3,7 +3,7 @@
 (prefer-coding-system 'utf-8)
 
 ;; set font
-(set-default-font "DejaVu Sans Mono for Powerline-14")
+;; (set-default-font "DejaVu Sans Mono for Powerline-14")
 
 ;; use system clipboard
 (setq ns-right-option-modifier nil
@@ -29,11 +29,6 @@
 ;; use spaces instead of tabs
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
-
-(setq indent-line-function 'insert-tab)
-
-;; make tab key do indent first then completion.
-(setq-default tab-always-indent 'complete)
 
 ;; disable bells
 (setq ring-bell-function 'ignore)
