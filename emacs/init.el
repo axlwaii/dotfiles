@@ -1,45 +1,40 @@
 (require 'package)
-
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-
-;; (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-;;                      ("marmalade" . "http://marmalade-repo.org/packages/")
-;;                      ("melpa" . "http://melpa.org/packages/")))
 
 ; list the packages you want
 (setq package-list '(
-                     typescript
-                     seti-theme
-                     yaml-mode
-                     handlebars-mode
-                     nord-theme
                      multi-term
-                     monokai-theme
                      exec-path-from-shell
                      dot-mode
-                     airline-themes
-                     dracula-theme
                      projectile
-                     projectile-rails
-                     web-mode magit
+                     go-mode
+                     rust-mode
+                     typescript-mode
+                     js2-mode
+                     web-mode
+                     vue-mode
+                     yaml-mode
+                     company
+                     magit
                      browse-kill-ring
                      ido-vertical-mode
                      flx-ido
                      flx
                      powerline
-                     skewer-mode
                      simple-httpd
-                     arjen-grey-theme
                      anzu
                      multiple-cursors
-                     rspec-mode
-                     base16-theme
                      ag
                      cider
-                     js2-mode
                      flycheck
-                     auto-complete
                      editorconfig
+                     arjen-grey-theme
+                     base16-theme
+                     nord-theme
+                     monokai-theme
+                     airline-themes
+                     dracula-theme
+                     seti-theme
                      )
       )
 
@@ -69,31 +64,26 @@
 (require 'init-term)
 
 (require 'init-utils)
-(require 'init-line-numbers)
 (require 'init-hl-line)
 (require 'init-whitespace)
-;; (require 'init-editor-config)
 (require 'init-editor-settings)
 (require 'init-ido)
 (require 'init-keymappings)
 (require 'init-dired)
 
-(require 'init-autocomplete)
+(require 'init-company-mode)
 (require 'init-anzu)
 (require 'init-multicursors)
 (require 'init-flycheck)
 (require 'init-dot-mode)
 
-(require 'init-ruby)
-;;(require 'init-rvm)
-(require 'init-rspec)
-
 (require 'init-webmode)
 (require 'init-javascript)
 (require 'init-css)
-(require 'init-skewer)
 
-(require 'init-powerline)
+(require 'init-editor-config)
+(require 'init-line-numbers)
+;;(require 'init-powerline)
 
 (require 'sort-css)
 (custom-set-variables
@@ -103,12 +93,10 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (vue-mode yaml-mode web-mode typescript skewer-mode seti-theme rspec-mode projectile-rails nord-theme multiple-cursors multi-term monokai-theme magit ido-vertical-mode handlebars-mode flycheck flx-ido exec-path-from-shell editorconfig dracula-theme dot-mode cider browse-kill-ring base16-theme auto-complete arjen-grey-theme anzu airline-themes ag))))
+    (seti-theme dracula-theme airline-themes monokai-theme nord-theme base16-theme arjen-grey-theme editorconfig flycheck cider ag multiple-cursors anzu simple-httpd powerline flx-ido ido-vertical-mode browse-kill-ring magit yaml-mode vue-mode web-mode typescript-mode rust-mode projectile multi-term mmm-mode js2-mode go-mode exec-path-from-shell dot-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)

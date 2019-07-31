@@ -3,7 +3,7 @@
 (prefer-coding-system 'utf-8)
 
 ;; set font
-;; (set-default-font "DejaVu Sans Mono for Powerline-14")
+;; (set-default-font "DejaVu Sans Mono 14")
 
 ;; use system clipboard
 (setq ns-right-option-modifier nil
@@ -14,6 +14,22 @@
 ;; disable auto-save and auto-backup
 (setq auto-save-default nil)
 (setq make-backup-files nil)
+
+(setq backup-directory-alist
+  `((".*" . ,temporary-file-directory)))
+
+(setq auto-save-file-name-transforms
+  `((".*" ,temporary-file-directory t)))
+
+(message "Deleting old backup files...")
+(let ((week (* 60 60 24 7))
+      (current (float-time (current-time))))
+  (dolist (file (directory-files temporary-file-directory t))
+    (when (and (backup-file-name-p file)
+               (> (- current (float-time (fifth (file-attributes file))))
+                  week))
+      (message "%s" file)
+      (delete-file file))))
 
 ;; Save buffer whe out of focus
 (defun save-all ()
@@ -50,6 +66,10 @@
 (setq split-width-threshold nil)
 (setq split-height-threshold 0)
 
+;; enanbel upcase and downcase shortcuts
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
 ;; aliases
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -81,15 +101,15 @@
 
 (recentf-mode 1)
 (setq recentf-max-menu-items 15)
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 ;; THEME
 ;;(load-theme 'badger t)
 ;;(load-theme 'arjen-grey t)
+
 (if window-system
     (progn (tool-bar-mode -1)
            (scroll-bar-mode -1)
-           (load-theme 'seti t)
+           (load-theme 'misterioso t)
            (menu-bar-mode t))
     (progn (load-theme 'base16-summerfruit-dark t)
            (menu-bar-mode -1)))

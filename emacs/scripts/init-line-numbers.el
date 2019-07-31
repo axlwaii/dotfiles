@@ -1,7 +1,7 @@
 ;; line-numbers
 (global-linum-mode t)
 (setq linum-format "%4d  ")
-;; (set-face-attribute 'linum nil :background "#333")
+(set-face-attribute 'linum nil :slant 'italic :background "#2E3440")
 
 ;; from https://www.emacswiki.org/emacs/linum-off.el
 (defcustom linum-disabled-modes-list '(eshell-mode wl-summary-mode compilation-mode org-mode text-mode dired-mode doc-view-mode image-mode)

@@ -3,6 +3,7 @@
 (global-set-key (kbd "C-x b") 'switch-to-buffer)
 (global-set-key (kbd "C-x p") 'projectile-find-file-dwim)
 (global-set-key (kbd "C-x d") 'dired)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 ;;; Editing
 (global-set-key (kbd "C-x u") 'undo)
