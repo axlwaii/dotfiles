@@ -1,0 +1,686 @@
+#+TITLE: Emacs Config
+#+TOC: true
+#+DATE: Thu Nov 21 21:33:18 2019
+
+After trying to split my emacs config I thought to give org mode config a try.
+This document should provide a simple overview of the setup I use.
+
+* Setup
+** Configure package sources
+
+Add repositories from which we'll load the packages.
+Setting =package-enable-at-startup= to =nil= prevents a second package load and slightly improves startup time.
+
+#+BEGIN_SRC emacs-lisp
+  (setq package-enable-at-startup nil)
+  (setq package-archives '(("gnu" . "http://mirrors.163.com/elpa/gnu/")
+                           ("melpa" . "https://melpa.org/packages/")
+                           ("org" . "http://orgmode.org/elpa/")))
+#+END_SRC
+
+** Bootstrap use-package
+
+If =use-package= is not installed, install it.
+
+#+BEGIN_SRC emacs-lisp
+  ;; (setq package-check-signature nil)
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package)
+    (eval-when-compile (require 'use-package)))
+#+END_SRC
+
+By default all packages should be installed from package manager.
+
+** Use gnu-elpa-keyring-updae
+
+#+BEGIN_SRC emacs-lisp
+(use-package gnu-elpa-keyring-update
+  :ensure t)
+#+END_SRC
+
+** Increase garbage collector threshold
+
+The default garbage collection threshold is 800kB, increasing this to 10MB for startup increases speed (from 11.0s -> 9.7s when I tested).
+
+#+BEGIN_SRC emacs-lisp
+  (setq gc-cons-threshold 10000000)
+
+  ;; Restore after startup
+  (add-hook 'after-init-hook
+            (lambda ()
+              (setq gc-cons-threshold 1000000)
+              (message "gc-cons-threshold restored to %S"
+                       gc-cons-threshold)))
+
+  ;; improve garbage collection
+  (defun my-minibuffer-setup-hook ()
+    (setq gc-cons-threshold most-positive-fixnum))
+
+  (defun my-minibuffer-exit-hook ()
+    (setq gc-cons-threshold 1000000))
+
+  (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+  (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+#+END_SRC
+
+** Configure path
+
+#+BEGIN_SRC emacs-lisp
+  (use-package exec-path-from-shell
+    :ensure t
+    :config
+    (exec-path-from-shell-initialize))
+#+END_SRC
+
+** Reload config
+
+#+BEGIN_SRC emacs-lisp
+(defun my/reload-emacs-configuration ()
+  (interactive)
+  (load-file "~/.emacs.d/init.el"))
+#+END_SRC
+
+** Make it easy to edit this file
+
+#+BEGIN_SRC emacs-lisp
+  (defun find-config ()
+    "Edit config.org"
+    (interactive)
+    (find-file "~/.emacs.d/config.org"))
+
+  (global-set-key (kbd "C-c I") 'find-config)
+#+END_SRC
+
+* Appearance
+** Window decoration
+
+Let's turn off unwanted window decoration.
+
+#+BEGIN_SRC emacs-lisp
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+#+END_SRC
+
+** Theme
+
+I use the nord theme.
+
+#+BEGIN_SRC emacs-lisp
+(use-package nord-theme
+  :ensure t
+  :config
+  ;; Add global-company-mode hook.
+  (load-theme 'nord t))
+#+END_SRC
+
+** Custom mode-line
+
+Define colors
+
+#+BEGIN_SRC emacs-lisp
+(column-number-mode 1)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; COLORS
+;;;
+;;; Using the NORD - Theme
+;;; https://github.com/arcticicestudio/nord/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconst nord-polar-night-palette '("#2E3440" "#3B4252" "#434C5E" "#4C566A"))
+(defconst nord-frost-palette       '("#8FBCBB" "#88C0D0" "#81A1C1" "#5E81AC"))
+
+(defvar main-bg-color      (nth 2 nord-polar-night-palette))
+(defvar secondary-bg-color (nth 3 nord-polar-night-palette))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+END_SRC
+
+Define mode line
+
+#+BEGIN_SRC emacs-lisp
+(defface mode-line-directory
+  '((t :background "#4C566A" :foreground "#ccc"))
+  "Face used for buffer identification parts of the mode line."
+  :group 'mode-line-faces
+  :group 'basic-faces)
+
+(defun shorten-directory (dir max-length)
+  "Show up to `max-length' characters of a directory name `dir'."
+  (let ((path (reverse (split-string (abbreviate-file-name dir) "/")))
+               (output ""))
+       (when (and path (equal "" (car path)))
+         (setq path (cdr path)))
+       (while (and path (< (length output) (- max-length 4)))
+         (setq output (concat (car path) "/" output))
+         (setq path (cdr path)))
+       (when path
+         (setq output (concat ".../" output)))
+       output))
+
+(defvar mode-line-directory
+  '(:propertize
+    (:eval (if (buffer-file-name) (concat "  " (shorten-directory default-directory 25)) " "))
+                face mode-line-directory)
+  "Formats the current directory.")
+(put 'mode-line-directory 'risky-local-variable t)
+
+(setq-default mode-line-buffer-identification
+  (propertized-buffer-identification "%b "))
+
+(setq mode-line-position
+            '(;; %p print percent of buffer above top of window, o Top, Bot or All
+              ;; (-3 "%p")
+              ;; %I print the size of the buffer, with kmG etc
+              ;; (size-indication-mode ("/" (-4 "%I")))
+              ;; " "
+              ;; %l print the current line number
+              ;; %c print the current column
+              (line-number-mode (" L: %l" (column-number-mode ":%c ")))))
+
+(display-time-mode t)
+(timeclock-mode-line-display)
+
+;; make and set faces
+(make-face 'mode-line-mode-face)
+(make-face 'mode-line-position-face)
+(set-face-attribute 'mode-line-mode-face nil :foreground "#98FFCC")
+(set-face-attribute 'mode-line-position-face nil :background secondary-bg-color :foreground "white")
+
+(set-face-attribute 'mode-line           nil :background main-bg-color)
+(set-face-attribute 'mode-line-buffer-id nil :background secondary-bg-color :foreground "white")
+
+;; (set-face-attribute 'mode-line-highlight nil :box "#fff" :background "#999")
+(set-face-attribute 'mode-line-inactive  nil :inherit 'default)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; mode-line alignment helper
+;; thanks to https://emacs.stackexchange.com/questions/16654/how-to-re-arrange-things-in-mode-line
+
+(defun mode-line-fill-right (face reserve)
+  "Return empty space using FACE and leaving RESERVE space on the right."
+  (unless reserve
+    (setq reserve 20))
+  (when (and window-system (eq 'right (get-scroll-bar-mode)))
+    (setq reserve (- reserve 3)))
+  (propertize " "
+              'display `((space :align-to (- (+ right right-fringe right-margin) ,reserve)))
+              'face face))
+
+(defun mode-line-fill-center (face reserve)
+  "Return empty space using FACE to the center of remaining space leaving RESERVE space on the right."
+  (unless reserve
+    (setq reserve 20))
+  (when (and window-system (eq 'right (get-scroll-bar-mode)))
+    (setq reserve (- reserve 3)))
+  (propertize " "
+              'display `((space :align-to (- (+ center (.5 . right-margin)) ,reserve
+                                             (.5 . left-margin))))
+              'face face))
+
+(defconst RIGHT_PADDING 1)
+
+(defun reserve-left/middle ()
+  (/ (length (format-mode-line mode-line-align-middle)) 2))
+
+(defun reserve-middle/right ()
+  (+ RIGHT_PADDING (length (format-mode-line mode-line-align-right))))
+
+;; modelines by alignment
+
+(setq mode-line-align-left
+      '(""
+        " "
+        mode-line-front-space
+        ;; mode-line-mule-info
+        mode-line-client
+        mode-line-modified
+        " "
+        ;; display mode of file
+        ;; mode-line-mode
+        (:propertize mode-name
+                     face mode-line-mode-face)
+        " "
+        " "
+        (vc-mode vc-mode)
+        ;;language-info-alist
+        ;; mode-line-remote -- no need to indicate this specially
+        " "
+        mode-line-directory
+        mode-line-buffer-identification
+        " "
+        (flycheck-mode flycheck-mode-line)
+        " "))
+
+(setq mode-line-align-middle
+      '(""
+        ))
+
+(setq mode-line-align-right
+      '(""
+        (:propertize mode-line-position
+                     face mode-line-position-face)
+        " "
+        mode-line-misc-info
+        mode-line-end-spaces
+        ))
+
+;; set modeline
+
+(setq-default mode-line-format
+              (list
+               mode-line-align-left
+               '(:eval (mode-line-fill-center 'mode-line
+                                              (reserve-left/middle)))
+               mode-line-align-middle
+               '(:eval
+                 (mode-line-fill-right 'mode-line
+                                       (reserve-middle/right)))
+               mode-line-align-right
+               ))
+
+#+END_SRC
+
+* Preferences
+** Don't display the help screen on startup.
+
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-screen t)
+#+END_SRC
+
+** Set backup directory
+A common frustration with new Emacs users is the =filename#= files created.
+This centralises the backup files created as you edit.
+
+#+BEGIN_SRC emacs-lisp
+  (setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+    backup-by-copying t    ; Don't delink hardlinks
+    version-control t      ; Use version numbers on backups
+    delete-old-versions t  ; Automatically delete excess backups
+    kept-new-versions 20   ; how many of the newest versions to keep
+    kept-old-versions 5    ; and how many of the old
+    )
+#+END_SRC
+
+** Set the environment.
+
+#+BEGIN_SRC emacs-lisp
+  (set-language-environment "utf-8")
+  (prefer-coding-system 'utf-8)
+#+END_SRC
+
+** Use System clipboard.
+
+#+BEGIN_SRC emacs-lisp
+  ;; use system clipboard
+  (setq ns-right-option-modifier nil
+        ns-left-option-modifier 'meta
+        ;;ns-command-modifier 'meta
+        x-select-enable-clipboard t)
+#+END_SRC
+
+** Enable line wrap
+
+#+BEGIN_SRC emacs-lisp
+  (global-visual-line-mode 1)
+#+END_SRC
+
+** Enable line numbers
+
+I should refactor the line number function at some point.
+
+#+BEGIN_SRC emacs-lisp
+;; line-numbers
+(global-linum-mode t)
+(setq linum-format "%4d  ")
+(set-face-attribute 'linum nil :slant 'italic :background "#2E3440")
+
+;; from https://www.emacswiki.org/emacs/linum-off.el
+(defcustom linum-disabled-modes-list '(eshell-mode wl-summary-mode compilation-mode org-mode text-mode dired-mode doc-view-mode image-mode)
+  "* List of modes disabled when global linum mode is on"
+  :type '(repeat (sexp :tag "Major mode"))
+  :tag " Major modes where linum is disabled: "
+  :group 'linum
+  )
+
+(defcustom linum-disable-starred-buffers 't
+  "* Disable buffers that have stars in them like *Gnu Emacs*"
+  :type 'boolean
+  :group 'linum)
+
+(defun linum-on ()
+  "* When linum is running globally, disable line number in modes defined in `linum-disabled-modes-list'. Changed by linum-off. Also turns off numbering in starred modes like *scratch*"
+
+  (unless (or (minibufferp)
+              (member major-mode linum-disabled-modes-list)
+              (string-match "*" (buffer-name))
+              (> (buffer-size) 3000000)) ;; disable linum on buffer greater than 3MB, otherwise it's unbearably slow
+    (linum-mode 1)))
+#+END_SRC
+
+** Show matching parenthesis
+
+#+BEGIN_SRC emacs-lisp
+  (show-paren-mode 1)
+#+END_SRC
+
+** Disable error bell
+
+#+BEGIN_SRC emacs-lisp
+  (setq ring-bell-function 'ignore)
+#+END_SRC
+
+** Use spaces instead of tabs
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default indent-tabs-mode nil)
+#+END_SRC
+
+** Make the =yes or no= prompts shorter.
+
+#+BEGIN_SRC emacs-lisp
+  (defalias 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+** Set Tab width default to 2
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default tab-width 2)
+#+END_SRC
+
+** Let the cursor blink
+
+#+BEGIN_SRC emacs-lisp
+  (blink-cursor-mode 1)
+#+END_SRC
+
+** Delete whitespace
+
+#+BEGIN_SRC emacs-lisp
+  (defun no-trailing-whitespace ()
+    (setq show-trailing-whitespace nil))
+
+  (use-package whitespace
+    :ensure t
+    :config
+    ;; Add delete whitespace hooks.
+    (add-hook 'minibuffer-setup-hook
+              'no-trailing-whitespace)
+    (add-hook 'eww-mode-hook
+              'no-trailing-whitespace)
+    (add-hook 'ielm-mode-hook
+              'no-trailing-whitespace)
+    (add-hook 'gdb-mode-hook
+              'no-trailing-whitespace)
+    (add-hook 'help-mode-hook
+              'no-trailing-whitespace)
+    (add-hook 'before-save-hook 'delete-trailing-whitespace))
+#+END_SRC
+
+** Custom Keyboard Commands
+
+Navigation
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x f") 'find-file)
+  (global-set-key (kbd "C-x b") 'switch-to-buffer)
+  (global-set-key (kbd "C-x d") 'dired)
+  (global-set-key "\C-x\ \C-r" 'recentf-open-files)
+#+END_SRC
+
+Editing
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x u") 'undo)
+(global-set-key (kbd "C-c c") 'copy-region-as-kill)
+(global-set-key (kbd "C-c l") 'comment-line)
+(global-set-key (kbd "C-c k") 'kill-whole-line)
+
+(global-set-key (kbd "C-c n") 'next-buffer)
+(global-set-key (kbd "C-c p") 'previous-buffer)
+
+(global-set-key (kbd "M-y") 'browse-kill-ring)
+
+(global-set-key (kbd "M-#") 'anzu-query-replace)
+(global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp)
+#+END_SRC
+
+* IDE
+** Fuzzy Search and completion
+
+Turn on ivy
+
+#+BEGIN_SRC emacs-lisp
+(use-package ivy
+  :ensure t
+  :init
+  (use-package flx
+    :ensure t)
+  (use-package counsel
+    :ensure t)
+  :config
+  (ivy-mode 1)
+  (setq ivy-re-builders-alist
+      '((swiper . ivy--regex-plus)
+        (t      . ivy--regex-fuzzy))))
+#+END_SRC
+Projectile is used for fuzzy search
+
+#+BEGIN_SRC emacs-lisp
+(use-package counsel-projectile
+  :ensure t
+  :config
+  (counsel-projectile-mode t)
+  (global-set-key (kbd "C-x p") 'counsel-projectile-find-file))
+
+#+END_SRC
+
+Company is used for autocompletion.
+
+#+BEGIN_SRC emacs-lisp
+(use-package company
+  :ensure t
+  :config
+  ;; Add global-company-mode hook.
+  (add-hook 'after-init-hook 'global-company-mode))
+#+END_SRC
+
+** Anzu - text search
+
+Anzu is used to highlight text when searching through a file.
+
+#+BEGIN_SRC emacs-lisp
+(use-package anzu
+  :ensure t
+  :config
+  ;; Add global-company-mode hook.
+  (global-anzu-mode +1)
+  (set-face-attribute 'anzu-mode-line nil
+                      :foreground "yellow" :weight 'bold)
+  (global-set-key (kbd "M-%") 'anzu-query-replace)
+  (global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp))
+#+END_SRC
+
+** Git
+
+#+BEGIN_SRC emacs-lisp
+(use-package magit
+  :ensure t)
+#+END_SRC
+
+** Error checking
+
+Add eslint binary function
+
+#+BEGIN_SRC emacs-lisp
+ ;; use local eslint from node_modules before global
+ ;; http://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
+ (defun me/use-eslint-from-node-modules ()
+   (let* ((root (locate-dominating-file
+                 (or (buffer-file-name) default-directory)
+                 "node_modules"))
+          (eslint (and root
+                       (expand-file-name "node_modules/eslint/bin/eslint.js"
+                                         root))))
+     (when (and eslint (file-executable-p eslint))
+       (setq-local flycheck-javascript-eslint-executable eslint))))
+#+END_SRC
+
+Configure flycheck
+
+#+BEGIN_SRC emacs-lisp
+ (use-package flycheck
+   :ensure t
+   :init
+   (use-package flycheck-inline
+     :ensure t)
+   (global-flycheck-mode)
+   :config
+   ;; disable javascript-jshint
+   (setq-default flycheck-disabled-checkers
+                 (append flycheck-disabled-checkers
+                         '(javascript-jshint ruby-rubylint ruby-rubocop emacs-lisp-checkdoc)))
+   (add-hook 'flycheck-mode-hook #'me/use-eslint-from-node-modules)
+   (flycheck-add-mode 'javascript-eslint 'vue-mode)
+   (with-eval-after-load 'flycheck
+     (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)))
+#+END_SRC
+
+* Coding
+** General
+*** Webmode
+
+#+BEGIN_SRC emacs-lisp
+(use-package web-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.scss\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.hbs\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.twig?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.hbs?\\'" . web-mode)))
+#+END_SRC
+
+** Markup
+*** Markdown
+
+#+BEGIN_SRC emacs-lisp
+(use-package markdown-mode
+  :ensure t)
+#+END_SRC
+
+** Javascipt
+*** VueJS
+
+#+BEGIN_SRC emacs-lisp
+(use-package vue-mode
+  :ensure t)
+#+END_SRC
+
+** Go
+** Rust
+** Lisp
+
+* Org
+** Hide emphasis
+
+Hide the emphasis in markup (e.g. /.../ for italics, *...* for bold, etc.):
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-hide-emphasis-markers t)
+#+END_SRC
+
+** Set font-lock
+
+Then, we set up a font-lock substitution for list markers
+(I use "-" for lists)
+
+#+BEGIN_SRC emacs-lisp
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+#+END_SRC
+
+** Org-bullets
+
+The org-bullets package replaces all headline markers with different Unicode bullets:
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+#+END_SRC
+
+** Set proportional font
+
+Finally, we set up a nice proportional font, in different sizes, for the headlines.
+The fonts listed will be tried in sequence, and the first one found will be used.
+
+#+BEGIN_SRC emacs-lisp
+  (let* ((variable-tuple
+          (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+                ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+                ((x-list-fonts "Verdana")         '(:font "Verdana"))
+                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+         (base-font-color     (face-foreground 'default nil 'default))
+         (headline           `(:inherit default :weight normal :foreground ,base-font-color)))
+
+    (custom-theme-set-faces
+     'user
+     `(org-level-8 ((t (,@headline ,@variable-tuple))))
+     `(org-level-7 ((t (,@headline ,@variable-tuple))))
+     `(org-level-6 ((t (,@headline ,@variable-tuple))))
+     `(org-level-5 ((t (,@headline ,@variable-tuple))))
+     `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.0))))
+     `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.1))))
+     `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.25))))
+     `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.5))))
+     `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
+#+END_SRC
+
+** Configure faces
+
+#+BEGIN_SRC emacs-lisp
+  (custom-theme-set-faces
+   'user
+   '(org-block ((t (:inherit fixed-pitch))))
+   '(org-code ((t (:inherit (shadow fixed-pitch)))))
+   '(org-document-info ((t (:foreground "dark orange"))))
+   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+   '(org-link ((t (:foreground "royal blue" :underline t))))
+   '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-property-value ((t (:inherit fixed-pitch))) t)
+   '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
+   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+   '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+#+END_SRC
+
+* Loaded last prevent overrides
+** Use Editor Config
+
+#+BEGIN_SRC emacs-lisp
+  (use-package editorconfig
+    :ensure t
+    :config
+    (editorconfig-mode 1)
+    (with-eval-after-load 'editorconfig
+      (add-to-list 'editorconfig-indentation-alist
+                   '(vue-mode css-indent-offset
+                              js-indent-level
+                              sgml-basic-offset
+                              ssass-tab-width
+                              ))))
+#+END_SRC
