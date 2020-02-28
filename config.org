@@ -12,10 +12,12 @@ Add repositories from which we'll load the packages.
 Setting =package-enable-at-startup= to =nil= prevents a second package load and slightly improves startup time.
 
 #+BEGIN_SRC emacs-lisp
+  (require 'package)
+
   (setq package-enable-at-startup nil)
-  (setq package-archives '(("gnu" . "http://mirrors.163.com/elpa/gnu/")
-                           ("melpa" . "https://melpa.org/packages/")
-                           ("org" . "http://orgmode.org/elpa/")))
+
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+  (package-initialize)
 #+END_SRC
 
 ** Bootstrap use-package
@@ -23,11 +25,15 @@ Setting =package-enable-at-startup= to =nil= prevents a second package load and 
 If =use-package= is not installed, install it.
 
 #+BEGIN_SRC emacs-lisp
-  ;; (setq package-check-signature nil)
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package)
-    (eval-when-compile (require 'use-package)))
+;; Bootstrap `use-package'
+
+(setq package-check-signature nil)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(setq use-package-always-ensure t)
 #+END_SRC
 
 By default all packages should be installed from package manager.
@@ -35,8 +41,7 @@ By default all packages should be installed from package manager.
 ** Use gnu-elpa-keyring-updae
 
 #+BEGIN_SRC emacs-lisp
-(use-package gnu-elpa-keyring-update
-  :ensure t)
+(use-package gnu-elpa-keyring-update)
 #+END_SRC
 
 ** Increase garbage collector threshold
@@ -68,7 +73,6 @@ The default garbage collection threshold is 800kB, increasing this to 10MB for s
 
 #+BEGIN_SRC emacs-lisp
   (use-package exec-path-from-shell
-    :ensure t
     :config
     (exec-path-from-shell-initialize))
 #+END_SRC
@@ -108,7 +112,6 @@ I use the nord theme.
 
 #+BEGIN_SRC emacs-lisp
 (use-package nord-theme
-  :ensure t
   :config
   ;; Add global-company-mode hook.
   (load-theme 'nord t))
@@ -231,7 +234,7 @@ Define mode line
 
 (setq mode-line-align-left
       '(""
-        " "
+        " "
         mode-line-front-space
         ;; mode-line-mule-info
         mode-line-client
@@ -242,7 +245,7 @@ Define mode line
         (:propertize mode-name
                      face mode-line-mode-face)
         " "
-        " "
+        " "
         (vc-mode vc-mode)
         ;;language-info-alist
         ;; mode-line-remote -- no need to indicate this specially
@@ -402,7 +405,6 @@ I should refactor the line number function at some point.
     (setq show-trailing-whitespace nil))
 
   (use-package whitespace
-    :ensure t
     :config
     ;; Add delete whitespace hooks.
     (add-hook 'minibuffer-setup-hook
@@ -453,23 +455,16 @@ Turn on ivy
 
 #+BEGIN_SRC emacs-lisp
 (use-package ivy
-  :ensure t
   :init
-  (use-package flx
-    :ensure t)
-  (use-package counsel
-    :ensure t)
+  (use-package flx)
+  (use-package counsel)
   :config
-  (ivy-mode 1)
-  (setq ivy-re-builders-alist
-      '((swiper . ivy--regex-plus)
-        (t      . ivy--regex-fuzzy))))
+  (ivy-mode 1))
 #+END_SRC
 Projectile is used for fuzzy search
 
 #+BEGIN_SRC emacs-lisp
 (use-package counsel-projectile
-  :ensure t
   :config
   (counsel-projectile-mode t)
   (global-set-key (kbd "C-x p") 'counsel-projectile-find-file))
@@ -480,7 +475,6 @@ Company is used for autocompletion.
 
 #+BEGIN_SRC emacs-lisp
 (use-package company
-  :ensure t
   :config
   ;; Add global-company-mode hook.
   (add-hook 'after-init-hook 'global-company-mode))
@@ -492,7 +486,6 @@ Anzu is used to highlight text when searching through a file.
 
 #+BEGIN_SRC emacs-lisp
 (use-package anzu
-  :ensure t
   :config
   ;; Add global-company-mode hook.
   (global-anzu-mode +1)
@@ -505,8 +498,7 @@ Anzu is used to highlight text when searching through a file.
 ** Git
 
 #+BEGIN_SRC emacs-lisp
-(use-package magit
-  :ensure t)
+(use-package magit)
 #+END_SRC
 
 ** Error checking
@@ -531,10 +523,8 @@ Configure flycheck
 
 #+BEGIN_SRC emacs-lisp
  (use-package flycheck
-   :ensure t
    :init
-   (use-package flycheck-inline
-     :ensure t)
+   (use-package flycheck-inline)
    (global-flycheck-mode)
    :config
    ;; disable javascript-jshint
@@ -553,7 +543,6 @@ Configure flycheck
 
 #+BEGIN_SRC emacs-lisp
 (use-package web-mode
-  :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.scss\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
@@ -574,106 +563,25 @@ Configure flycheck
 *** Markdown
 
 #+BEGIN_SRC emacs-lisp
-(use-package markdown-mode
-  :ensure t)
+(use-package markdown-mode)
 #+END_SRC
 
 ** Javascipt
 *** VueJS
 
 #+BEGIN_SRC emacs-lisp
-(use-package vue-mode
-  :ensure t)
+(use-package vue-mode)
 #+END_SRC
 
 ** Go
 ** Rust
 ** Lisp
 
-* Org
-** Hide emphasis
-
-Hide the emphasis in markup (e.g. /.../ for italics, *...* for bold, etc.):
-
-#+BEGIN_SRC emacs-lisp
-  (setq org-hide-emphasis-markers t)
-#+END_SRC
-
-** Set font-lock
-
-Then, we set up a font-lock substitution for list markers
-(I use "-" for lists)
-
-#+BEGIN_SRC emacs-lisp
-  (font-lock-add-keywords 'org-mode
-                          '(("^ *\\([-]\\) "
-                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-#+END_SRC
-
-** Org-bullets
-
-The org-bullets package replaces all headline markers with different Unicode bullets:
-
-#+BEGIN_SRC emacs-lisp
-(use-package org-bullets
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-#+END_SRC
-
-** Set proportional font
-
-Finally, we set up a nice proportional font, in different sizes, for the headlines.
-The fonts listed will be tried in sequence, and the first one found will be used.
-
-#+BEGIN_SRC emacs-lisp
-  (let* ((variable-tuple
-          (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-                ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-                ((x-list-fonts "Verdana")         '(:font "Verdana"))
-                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-         (base-font-color     (face-foreground 'default nil 'default))
-         (headline           `(:inherit default :weight normal :foreground ,base-font-color)))
-
-    (custom-theme-set-faces
-     'user
-     `(org-level-8 ((t (,@headline ,@variable-tuple))))
-     `(org-level-7 ((t (,@headline ,@variable-tuple))))
-     `(org-level-6 ((t (,@headline ,@variable-tuple))))
-     `(org-level-5 ((t (,@headline ,@variable-tuple))))
-     `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.0))))
-     `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.1))))
-     `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.25))))
-     `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.5))))
-     `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
-#+END_SRC
-
-** Configure faces
-
-#+BEGIN_SRC emacs-lisp
-  (custom-theme-set-faces
-   'user
-   '(org-block ((t (:inherit fixed-pitch))))
-   '(org-code ((t (:inherit (shadow fixed-pitch)))))
-   '(org-document-info ((t (:foreground "dark orange"))))
-   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
-   '(org-link ((t (:foreground "royal blue" :underline t))))
-   '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-   '(org-property-value ((t (:inherit fixed-pitch))) t)
-   '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
-   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
-   '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
-#+END_SRC
-
 * Loaded last prevent overrides
 ** Use Editor Config
 
 #+BEGIN_SRC emacs-lisp
   (use-package editorconfig
-    :ensure t
     :config
     (editorconfig-mode 1)
     (with-eval-after-load 'editorconfig
